@@ -1,0 +1,97 @@
+---
+title: "Live Session 4 Assigment: Questions 1, 2, and 3"
+author: "Manuel Rosales"
+date: "February 1, 2018" 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1: Five Thirty Eight
+
+a) **Install the fivethirtyeightpackage:** command used to install is *install.packages("fivethirtyeight")*
+
+b) In the listing of Data sets in package 'fivethirtyeight,' assign the eighteenth data set to an object 'df.'
+
+c) Use a more detailed list of the data sets to write out the URL in a comment to the related news story.   
+    + The desired URL is http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+
+d) Using R command(s), give the dimensions and column names of this data frame.
+
+
+```{r Question1}
+# Assign eighteenth data set to an object 'df'
+library(fivethirtyeight)
+vignette("fivethirtyeight", package = "fivethirtyeight")
+df <- college_recent_grads # This is the eighteenth data set
+
+# URL is http://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/
+
+dim(df) # Dimensions
+colnames(df) # Column names
+```
+
+## Question 2: Data Summary
+
+a) Write an R command that gives you the column names of the data frame.  Right after that, write one that counts the number of columns but not rows.  Hint: The number should match one of your numbers in Question 1d for dimensions.
+
+```{r Question2a}
+library(fivethirtyeight)
+df <- college_recent_grads
+colnames(df) # Column names
+ncol(df) # Number of columns
+```
+
+b) Generate a count of each unique major_category in the data frame.  I recommend using libraries to help.  I have demonstrated one briefly in live-session.  To be clear, this should look like a matrix or data frame containing the major_category and the frequency it occurs in the dataset.  Assign it to major_count.
+
+```{r Question2b}
+# Build a contingency table of the counts at each factor level
+majorTable <- table(df$major_category)
+
+# Coerce to contingency table
+major_count <- as.data.frame(majorTable)
+names(major_count) <- c("major_category","Freq")
+major_count
+```
+
+c) Make a barplot of major_count.  label the x and y axis, and make it any color other than grey.  Assign the major_category labels to their respective bar.  Flip the barplot horizontally so that bars extend to the right, not upward.  All of these options can be done in a single pass of barplot(). Note: It's okay if it's wider than the preview pane.
+
+```{r Question2c}
+par(mar=c(5.1, 15, 4.1, 2.1), mgp=c(3, 1, 0), las=2) #http://rfunction.com/archives/1302
+barplot(majorTable,
+				horiz = TRUE,
+				main = 'Major Category vs Frequency', 
+				xlab ='Frequency',
+				ylab ='',
+				xlim = c(0,30),
+				axes = TRUE,
+				col = 'Light Blue',
+				density = 40)
+```
+
+d) Write the fivethirtyeight data to a csv file.  Make sure that it does not have row labels.
+
+```{r Question2d}
+# Notice row.names option set to FALSE
+write.csv(df, "fivethirtyeight.csv", row.names = FALSE)
+check <- read.csv("fivethirtyeight.csv")
+head(check)
+```
+
+## Question 3: Codebook
+The steps below were followed to create a new repository to house assignments related to this course. 
+The hyperlink to my repository is: https://github.com/MannyTX08/DoingDDSGitHub  
+
+The specific direcotry associated with Live Session 4 Assignment is: https://github.com/MannyTX08/DoingDDSGitHub/tree/master/Unit_04 
+
+Special thanks to fivethirtyeight r package!
+
+* Start a new repository on GitHub for your SMU MSDS homework.  On your local device, make sure there is a directory for Homework at the minimum; you are welcome to add whatever you would like to this repo in addition to your requirements here.
+
+* Create a README.md file which explains the purpose of the repository, the topics included, the sources for the material you post, and contact information in case of questions. Remember, the one in the root directory should be general.  You are welcome to make short READMEs for each assignment individually in other folders.
+
+* In one (or more) of the nested directories, post your RMarkdown script, HTML file, and data from 'fivethirtyeight.'  Make sure that in your README or elsewhere that you credit fivethirtyeight in some way.
+
+* In your RMarkdown script, please provide the link to this GitHub so the grader can see it.

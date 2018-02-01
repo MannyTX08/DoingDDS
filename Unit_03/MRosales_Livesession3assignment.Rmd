@@ -1,0 +1,117 @@
+---
+title: "Live Session 3 Assignment: Questions 1, 2, and 3"
+author: "Manuel Rosales"
+date: "January 25, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+## Question 1
+### Within this .Rmd file you will find comments for commands to...
+1. Change the directory (cd ~/Desktop/git_repositories)
+2. Create a directory (mkdir CloningDir)
+3. Navigate to the new directory (cd CloningDir)
+4. Clone the repository to that directory (git clone https://github.com/caesar0301/awesome-public-datasets)
+
+<!-- 
+cd ~/Desktop/git_repositories
+mkdir CloningDir
+cd CloningDir
+git clone https://github.com/caesar0301/awesome-public-datasets
+-->
+
+## Question 2
+### From the newly created directory, steps (a), (b), and (c) below will be conducted
+### 
+### (a) Read in titanic.csv via either read.table() or read.csv(), assigning it to df
+
+```{r readcsv}
+setwd("~/Desktop/git_repositories/CloningDir/awesome-public-datasets/Datasets")
+df <- read.csv("titanic.csv")
+```
+### (b) Output the respective count of females and males aboard the Titanic.  
+```{r genderstats}
+# Create objects for count by gender
+CountFemale <- nrow(subset(df,df$Sex=='female'))
+CountMale <- nrow(subset(df,df$Sex=='male'))
+
+# Create matrix to display counts
+CountMatrix <- matrix(c(CountFemale,CountMale),ncol = 1)
+rownames(CountMatrix) <- c('Female','Male')
+colnames(CountMatrix) <- c('Count')
+CountMatrix
+```
+
+### Plot the frequency of females and males. 
+```{r genderplot}
+library(ggplot2)
+
+freqplot <- ggplot(df, aes(Sex)) + 
+          geom_bar(aes(y = (..count..)/sum(..count..), fill = Sex)) + 
+          scale_y_continuous(labels=scales::percent) +
+          xlab("Passenger Sex") +
+          ylab("Relative Frequencies") +
+          labs(title = "Titanic Passengers", subtitle = "Frequency Plot by Sex")
+
+freqplot
+```
+
+### (C) Use an apply function to generate means of Age, Fare, and Survived
+```{r applyfunc}
+# Generate subset of data frame
+MyCols <- subset(df, select = c("Age", "Fare", "Survived"))
+
+# Apply mean function while accounting for NA values on MyCols
+MeansMyCols <- sapply(MyCols, mean, na.rm = TRUE)
+
+MeansMyCols
+```
+
+## Question 3
+
+(a)	Create objects for the median Age, the minimum and maximum Duration of sleep, and the mean and standard deviation of the Rosenberg Self Esteem scale (RSES).  
+
+(b) Create a data.frame object called report: it should consist of the median age, the RSES mean and standard deviation respectively divided by five (since there are five questions and these scores are summed), and the range of Duration (the statistical definition of range; it should be a single number.)
+
+(c) Change the column names of this data.frame to MedianAge, SelfEsteem, SE_SD, and DurationRange.
+
+(d) Round the report to at most 2 digits: leave this as the closing line to the function.
+
+
+```{r question3func}
+setwd("~/Library/Mobile Documents/com~apple~CloudDocs/DataScience@SMU/MSDS_DDS/Unit_03/HW")
+
+sleep <- read.csv("sleep_data_01.csv")
+
+# Function to enerate median age, max and min sleep duration, mean and sd of RSES
+question3func <- function(age=sleep$Age, dur=sleep$Duration, R=sleep$RSES){
+  
+  # Median Age
+  MedianAge <- median(age, na.rm = TRUE)
+  
+  # Min and Max for Duration of Sleep
+  minDurSleep <- min(dur, na.rm = TRUE)
+  maxDurSleep <- max(dur, na.rm = TRUE)
+  
+  # Mean and SD for RSES
+  meanRSES <- mean(R, na.rm = TRUE)
+  sdRSES <- sd(R, na.rm = TRUE)
+  
+  # Prepare data for report
+  meanRSES <- meanRSES/5
+  sdRSES <- sdRSES/5
+  rangeSleep <- maxDurSleep-minDurSleep
+  
+  # Create report, name columns, and round to 2 digits
+  report <- data.frame(MedianAge, meanRSES, sdRSES, rangeSleep )
+  colnames(report) <- c("MedianAge", "SelfEsteem", "SE_SD", "DurationRange")
+  report <- round(report,2)
+  
+  report
+}
+question3func()
+```

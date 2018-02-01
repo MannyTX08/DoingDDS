@@ -1,0 +1,100 @@
+---
+title: "Live Session 2 Assigment: Questions 1, 2, and 3"
+author: "Manuel Rosales"
+date: "January 17, 2018" 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+#### •	What is a basic workflow for reproducible research?
+There are essentialy three stages of reproducible research: Data gathering, data analysis and results representation. A basic workflow for these stages could include:
+
+1. **Data gathering:** collect, enter, organize, and document the data.
+2. Plan out what to do with the data and generate initial code.
+3. **Data analysis:** create visualizations, perform functions or hypothesis to generate conclusions. Pack up functions for future use.
+4. Automation
+5. **Results represetnation:** Document workflow to generate results and make results consumable and data sets available.
+6. Version control.
+
+#### •	What are five practical tips for making research reproducible?
+1. Document everything!
+2. Everything is a (text) file.
+3. All files should be human readable.
+4. Explicitly tie your files together.
+5. Have a plan to organize, store, and make your files available.
+
+#### •	Give an example of how you might implement each tip.
+1. **Document everything:** record your session info which includes information like packages used and version of R. This will help others know what you are trying to achieve. For the person who is doing this research, documenting can refresh the memory when looking back after a while. 
+2. **Everything is a (text) file :** one should use the simplest format to store the data since they can be opened by any program that can read .txt files. This also helps future-proof the research.
+3. **All files should be human readable:** Treat all of your research files as if someone who has not worked on the project will, in the future, try to understand them. To make them human readable, you should comment on your code with the goal of communicating its design and purpose.
+4. **Explicitly tie your files together:** This helps the future user/researcher understand the relationship of the files being used in the project. One can use tie commands in R to explicitly tie all files together.
+5. **Have a plan to organize, store, and make your files available:** Files need to be organized so researchers can figure out how they work together. From inception of the research, a plan of organizing files and a way to make them available when needed is critical. Breaking operations into discrete parts will be helpful when fixing errors.
+
+#### •	Which one of these do you think will be the most difficult?
+Of the 5 practical tips I believe **explicitly tie files together** will be most difficult. A data set can be considered as the input of an analysis, a figure can be considered as an output of an analysis. The results of an analysis are shown and discussed in a markup file that is used to create a PDF document. Researchers often do not explicitly document the relationships between files that they used in their research. These items will have to be considered when not only attempting to tie files together but representing results.
+
+## Question 2
+#### 2a) Below is a function to create a plot of Temperature vs Month from the airquality dataset.
+```{r Q2A, echo=TRUE}
+# TODO: Assignment 2, Q2A: Complete the following code to yield a scatterplot with x as Month and y as Temp
+# You're going to customize your plot slightly.  Use the help function to assist you if needed.
+# Make the x label "Month" and the y label "Temperature"
+# Finally, make the title of the plot "Temperature by Month" 
+plot(x=airquality$Month,          # Defining x
+     y=airquality$Temp,           # Defining y
+     xlab='Month',                # Labeling x axis
+     ylab='Temperature',          # Labeling y axis
+     main='Temperature by Month'  # Main label of plot
+     ) 
+```
+
+#### 2b) Below is a function to create a plot of Ozone vs Temperature from the airquality dataset.
+```{r Q2B, echo=TRUE}
+# TODO: Assignment 2, Q2B: Build a scatter plot with x as Temperature and y as Ozone 
+# Complete the following code:
+# Make the x label "Temperature" and the y label "Ozone",
+# Make the title of the plot "Temperature vs Ozone"
+plot(x=airquality$Temp,          # Defining X
+     y=airquality$Ozone,         # Defining y
+     xlab='Temperature',         # Labeling x axis
+     ylab='Ozone',               # Labeling y axis
+     main='Temperature vs Ozone' # Main label of plot
+     )
+```
+
+## Question 3
+#### 3a) Below is a function to create a plot of Temperature vs Pressure from the pressure dataset.
+You can also embed plots as default, for example:
+<!--
+TODO: Assignment 2: 3A, complete the following scatter plot. 
+The x axis is pressure, while the y axis is temperature
+Please title the graph "Temperature vs Pressure"
+-->
+```{r pressure_plot, echo=TRUE}
+plot(x=pressure$pressure,
+     y=pressure$temperature,
+     xlab='Pressure',
+     ylab='Temperature',
+     main='Temperature vs Pressure'
+     )
+```
+
+#### 3b) Below is a function to create a plot of Temperature vs Pressure from the pressure dataset.
+_Assignment requests a flip to the plot yet the x and y axis have not changed, given that we are supposed to flip the plot I took the title as the desired result._
+<!--
+TODO: Assignment 2: 3B, complete the following scatter plot:
+x axis is pressure, y axis is temperature,  
+Label the x axis as "Pressure" and the y axis as "Temperature", 
+Title the graph as "Pressure vs Temperature"
+-->
+```{r pressure_plot2, echo=TRUE}
+plot(x=pressure$temperature,
+     y=pressure$pressure,
+     xlab='Temperature',
+     ylab='Pressure',
+     main='Pressure vs Temperature')
+```
