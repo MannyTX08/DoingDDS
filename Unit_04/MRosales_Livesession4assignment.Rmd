@@ -1,5 +1,5 @@
 ---
-title: "Live Session 4 Assigment: Questions 1, 2, and 3"
+title: "Live Session 4 Assigment: Questions 1, 2, and Codebook"
 author: "Manuel Rosales"
 date: "February 1, 2018" 
 output: html_document
@@ -80,7 +80,7 @@ check <- read.csv("fivethirtyeight.csv")
 head(check)
 ```
 
-## Question 3: Codebook
+## Codebook
 The steps below were followed to create a new repository to house assignments related to this course. 
 The hyperlink to my repository is: https://github.com/MannyTX08/DoingDDSGitHub  
 
