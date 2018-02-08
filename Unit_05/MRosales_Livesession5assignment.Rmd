@@ -31,8 +31,74 @@ str(df)
 
 c) One name was entered twice and misspelled. He accidentally put three y's at the end of the name.  Write an R command to figure out which name it is and display it.
 
+```{r Question1c}
+# Question 1c
+BadName <- grep('yyy$', df$FirstName,value = TRUE) # Find value with yyy and assign to BadName
+BadName # Show value
+```
+
 d) Upon finding the misspelled name, please remove this particular observation, as the client says it's redundant.  Save the remaining dataset as an object: y2016 
 
+```{r Question1d}
+# Question 1d
+y2016 <- df[which(df$FirstName != BadName),] # Keep all rows in df where FirstName != BadName
+
+# Confirming that row was removed
+nrow(df)-nrow(y2016) 
+```
 
 
+## Question 2: Data Munging
 
+a) Like 1a, please import the .txt file into R.  Look at the file before you do.  You might have to change some options to import it properly.  Again, please give the dataframe human-readable column names.  Assign the dataframe to y2015.  
+
+```{r Question2a}
+# Question 2a
+setwd("~/Library/Mobile Documents/com~apple~CloudDocs/DataScience@SMU/MSDS_DDS/DoingDDSGitHub/Unit_05")
+y2015 <- read.table("yob2015.txt", header = FALSE, sep = ",", col.names = c("FirstName","Gender","Count"))
+```
+
+b) Display the last ten rows in the dataframe.  Describe something you find interesting about these 10 rows.
+
+The last ten rows are all male names starting with letter Z(specifically Zy) which all have a Count = 5.
+
+```{r Question2b}
+# Question 2a
+tail(y2015,10) # Review head of df
+```
+
+c)	Merge y2016 and y2015 by your Name column; assign it to final.  The client only cares about names that have data for both 2016 and 2015; there should be no NA values in either of your amount of children rows after merging.
+
+```{r Question2c}
+# Question 2c
+
+final <- merge(y2015,y2016,by = "FirstName", all = FALSE) # Setting all = FALSE only brings names present in both data
+colnames(final) <- c("FirstName","Gender2015","Count2015","Gender2016","Count2016" )
+head(final)
+```
+
+## Question 3: Data Summary
+
+a) Create a new column called "Total" in final that adds the amount of children in 2015 and 2016 together.  In those two years combined, how many people were given popular names?
+```{r Question3a}
+# Question 3a
+
+```
+
+b) Sort the data by Total.  What are the top 10 most popular names?
+```{r Question3b}
+# Question 3b
+
+```
+
+c) The client is expecting a girl!  Omit boys and give the top 10 most popular girl's names.
+```{r Question3c}
+# Question 3c
+
+```
+
+d) Write these top 10 girl names and their Totals to a CSV file.  Leave out the other columns entirely.
+```{r Question3d}
+# Question 3d
+
+```

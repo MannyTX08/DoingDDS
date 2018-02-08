@@ -166,9 +166,81 @@ summary(df)</code></pre>
 ##  $ Gender   : Factor w/ 2 levels &quot;F&quot;,&quot;M&quot;: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ Count    : int  19414 19246 16237 16070 14722 14366 13030 11699 10926 10733 ...</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
-<li><p>One name was entered twice and misspelled. He accidentally put three y’s at the end of the name. Write an R command to figure out which name it is and display it.</p></li>
-<li><p>Upon finding the misspelled name, please remove this particular observation, as the client says it’s redundant. Save the remaining dataset as an object: y2016</p></li>
+<li>One name was entered twice and misspelled. He accidentally put three y’s at the end of the name. Write an R command to figure out which name it is and display it.</li>
 </ol>
+<pre class="r"><code># Question 1c
+BadName &lt;- grep('yyy$', df$FirstName,value = TRUE) # Find value with yyy and assign to BadName
+BadName # Show value</code></pre>
+<pre><code>## [1] &quot;Fionayyy&quot;</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Upon finding the misspelled name, please remove this particular observation, as the client says it’s redundant. Save the remaining dataset as an object: y2016</li>
+</ol>
+<pre class="r"><code># Question 1d
+y2016 &lt;- df[which(df$FirstName != BadName),] # Keep all rows in df where FirstName != BadName
+
+# Confirming that row was removed
+nrow(df)-nrow(y2016) </code></pre>
+<pre><code>## [1] 1</code></pre>
+</div>
+<div id="question-2-data-munging" class="section level2">
+<h2>Question 2: Data Munging</h2>
+<ol style="list-style-type: lower-alpha">
+<li>Like 1a, please import the .txt file into R. Look at the file before you do. You might have to change some options to import it properly. Again, please give the dataframe human-readable column names. Assign the dataframe to y2015.</li>
+</ol>
+<pre class="r"><code># Question 2a
+setwd(&quot;~/Library/Mobile Documents/com~apple~CloudDocs/DataScience@SMU/MSDS_DDS/DoingDDSGitHub/Unit_05&quot;)
+y2015 &lt;- read.table(&quot;yob2015.txt&quot;, header = FALSE, sep = &quot;,&quot;, col.names = c(&quot;FirstName&quot;,&quot;Gender&quot;,&quot;Count&quot;))</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Display the last ten rows in the dataframe. Describe something you find interesting about these 10 rows.</li>
+</ol>
+<p>The last ten rows are all male names starting with letter Z(specifically Zy) which all have a Count = 5.</p>
+<pre class="r"><code># Question 2a
+tail(y2015,10) # Review head of df</code></pre>
+<pre><code>##       FirstName Gender Count
+## 33054      Ziyu      M     5
+## 33055      Zoel      M     5
+## 33056     Zohar      M     5
+## 33057    Zolton      M     5
+## 33058      Zyah      M     5
+## 33059    Zykell      M     5
+## 33060    Zyking      M     5
+## 33061     Zykir      M     5
+## 33062     Zyrus      M     5
+## 33063      Zyus      M     5</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Merge y2016 and y2015 by your Name column; assign it to final. The client only cares about names that have data for both 2016 and 2015; there should be no NA values in either of your amount of children rows after merging.</li>
+</ol>
+<pre class="r"><code># Question 2c
+
+final &lt;- merge(y2015,y2016,by = &quot;FirstName&quot;, all = FALSE) # Setting all = FALSE only brings names present in both data
+colnames(final) &lt;- c(&quot;FirstName&quot;,&quot;Gender2015&quot;,&quot;Count2015&quot;,&quot;Gender2016&quot;,&quot;Count2016&quot; )
+head(final)</code></pre>
+<pre><code>##   FirstName Gender2015 Count2015 Gender2016 Count2016
+## 1     Aaban          M        15          M         9
+## 2     Aabha          F         7          F         7
+## 3 Aabriella          F         5          F        11
+## 4     Aadam          M        22          M        18
+## 5   Aadarsh          M        15          M        11
+## 6     Aaden          M       297          M       194</code></pre>
+</div>
+<div id="question-3-data-summary" class="section level2">
+<h2>Question 3: Data Summary</h2>
+<ol style="list-style-type: lower-alpha">
+<li>Create a new column called “Total” in final that adds the amount of children in 2015 and 2016 together. In those two years combined, how many people were given popular names?</li>
+</ol>
+<pre class="r"><code># Question 3a</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Sort the data by Total. What are the top 10 most popular names?</li>
+</ol>
+<pre class="r"><code># Question 3b</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>The client is expecting a girl! Omit boys and give the top 10 most popular girl’s names.</li>
+</ol>
+<pre class="r"><code># Question 3c</code></pre>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Write these top 10 girl names and their Totals to a CSV file. Leave out the other columns entirely.</li>
+</ol>
+<pre class="r"><code># Question 3d</code></pre>
 </div>
 
 
