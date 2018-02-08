@@ -211,7 +211,6 @@ tail(y2015,10) # Review head of df</code></pre>
 <li>Merge y2016 and y2015 by your Name column; assign it to final. The client only cares about names that have data for both 2016 and 2015; there should be no NA values in either of your amount of children rows after merging.</li>
 </ol>
 <pre class="r"><code># Question 2c
-
 final &lt;- merge(y2015,y2016,by = &quot;FirstName&quot;, all = FALSE) # Setting all = FALSE only brings names present in both data
 colnames(final) &lt;- c(&quot;FirstName&quot;,&quot;Gender2015&quot;,&quot;Count2015&quot;,&quot;Gender2016&quot;,&quot;Count2016&quot; )
 head(final)</code></pre>
@@ -228,19 +227,69 @@ head(final)</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li>Create a new column called “Total” in final that adds the amount of children in 2015 and 2016 together. In those two years combined, how many people were given popular names?</li>
 </ol>
-<pre class="r"><code># Question 3a</code></pre>
+<pre class="r"><code># Question 3a
+final$Total &lt;- final$Count2015+final$Count2016 # Combine Counts for 2015 and 2016
+sum(final$Total) # Determine total count</code></pre>
+<pre><code>## [1] 11404228</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Sort the data by Total. What are the top 10 most popular names?</li>
 </ol>
-<pre class="r"><code># Question 3b</code></pre>
+<pre class="r"><code># Question 3b
+final &lt;- final[order(-final$Total),] # Order by Total descending
+top10 &lt;- head(final, 10) # Generate top 10 list
+top10</code></pre>
+<pre><code>##       FirstName Gender2015 Count2015 Gender2016 Count2016 Total
+## 9820       Emma          F     20415          F     19414 39829
+## 23607    Olivia          F     19638          F     19246 38884
+## 23258      Noah          M     19594          M     19015 38609
+## 19277      Liam          M     18330          M     18138 36468
+## 27782    Sophia          F     17381          F     16070 33451
+## 3725        Ava          F     16340          F     16237 32577
+## 21102     Mason          M     16591          M     15192 31783
+## 30128   William          M     15863          M     15668 31531
+## 13054     Jacob          M     15914          M     14416 30330
+## 12698  Isabella          F     15574          F     14722 30296</code></pre>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>The client is expecting a girl! Omit boys and give the top 10 most popular girl’s names.</li>
 </ol>
-<pre class="r"><code># Question 3c</code></pre>
+<pre class="r"><code># Question 3c
+topgirls &lt;- final[which(final$Gender2015=='F'&amp; final$Gender2016=='F'),] # Subset for only Female
+topgirls &lt;- topgirls[order(-topgirls$Total),] # Order by Total descending
+top10girls &lt;- head(topgirls,n=10) # Generate top 10 list
+top10girls</code></pre>
+<pre><code>##       FirstName Gender2015 Count2015 Gender2016 Count2016 Total
+## 9820       Emma          F     20415          F     19414 39829
+## 23607    Olivia          F     19638          F     19246 38884
+## 27782    Sophia          F     17381          F     16070 33451
+## 3725        Ava          F     16340          F     16237 32577
+## 12698  Isabella          F     15574          F     14722 30296
+## 21722       Mia          F     14871          F     14366 29237
+## 6509  Charlotte          F     11381          F     13030 24411
+## 302     Abigail          F     12371          F     11699 24070
+## 9799      Emily          F     11766          F     10926 22692
+## 11838    Harper          F     10283          F     10733 21016</code></pre>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Write these top 10 girl names and their Totals to a CSV file. Leave out the other columns entirely.</li>
 </ol>
-<pre class="r"><code># Question 3d</code></pre>
+<pre class="r"><code># Question 3d
+top10girlsExport &lt;- data.frame(FirstName = top10girls$FirstName, Total = top10girls$Total)
+write.csv(top10girlsExport, file = &quot;Top10GirlNames.csv&quot;, row.names = FALSE)
+read.csv(file = &quot;Top10GirlNames.csv&quot;)</code></pre>
+<pre><code>##    FirstName Total
+## 1       Emma 39829
+## 2     Olivia 38884
+## 3     Sophia 33451
+## 4        Ava 32577
+## 5   Isabella 30296
+## 6        Mia 29237
+## 7  Charlotte 24411
+## 8    Abigail 24070
+## 9      Emily 22692
+## 10    Harper 21016</code></pre>
+</div>
+<div id="upload-to-github" class="section level2">
+<h2>Upload to GitHub</h2>
+<p>To review this Rmd file and all other associated documents, please go to <a href="https://github.com/MannyTX08/DoingDDSGitHub/tree/master/Unit_05" class="uri">https://github.com/MannyTX08/DoingDDSGitHub/tree/master/Unit_05</a></p>
 </div>
 
 

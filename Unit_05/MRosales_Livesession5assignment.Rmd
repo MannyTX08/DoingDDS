@@ -48,7 +48,7 @@ nrow(df)-nrow(y2016)
 ```
 
 
-## Question 2: Data Munging
+## Question 2: Data Merging
 
 a) Like 1a, please import the .txt file into R.  Look at the file before you do.  You might have to change some options to import it properly.  Again, please give the dataframe human-readable column names.  Assign the dataframe to y2015.  
 
@@ -71,7 +71,6 @@ c)	Merge y2016 and y2015 by your Name column; assign it to final.  The client on
 
 ```{r Question2c}
 # Question 2c
-
 final <- merge(y2015,y2016,by = "FirstName", all = FALSE) # Setting all = FALSE only brings names present in both data
 colnames(final) <- c("FirstName","Gender2015","Count2015","Gender2016","Count2016" )
 head(final)
@@ -82,23 +81,34 @@ head(final)
 a) Create a new column called "Total" in final that adds the amount of children in 2015 and 2016 together.  In those two years combined, how many people were given popular names?
 ```{r Question3a}
 # Question 3a
-
+final$Total <- final$Count2015+final$Count2016 # Combine Counts for 2015 and 2016
+sum(final$Total) # Determine total count
 ```
 
 b) Sort the data by Total.  What are the top 10 most popular names?
 ```{r Question3b}
 # Question 3b
-
+final <- final[order(-final$Total),] # Order by Total descending
+top10 <- head(final, 10) # Generate top 10 list
+top10
 ```
 
 c) The client is expecting a girl!  Omit boys and give the top 10 most popular girl's names.
 ```{r Question3c}
 # Question 3c
-
+topgirls <- final[which(final$Gender2015=='F'& final$Gender2016=='F'),] # Subset for only Female
+topgirls <- topgirls[order(-topgirls$Total),] # Order by Total descending
+top10girls <- head(topgirls,n=10) # Generate top 10 list
+top10girls
 ```
 
 d) Write these top 10 girl names and their Totals to a CSV file.  Leave out the other columns entirely.
 ```{r Question3d}
 # Question 3d
-
+top10girlsExport <- data.frame(FirstName = top10girls$FirstName, Total = top10girls$Total)
+write.csv(top10girlsExport, file = "Top10GirlNames.csv", row.names = FALSE)
+read.csv(file = "Top10GirlNames.csv")
 ```
+
+## Upload to GitHub
+To review this Rmd file and all other associated documents, please go to https://github.com/MannyTX08/DoingDDSGitHub/tree/master/Unit_05

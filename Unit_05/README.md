@@ -11,5 +11,7 @@ Data Sets
     Column 3 = Number of children given name in 2016
 
 Files
-*MRosales_Livesession5assignment.html
-*MRosales_Livesession5assignment.RMD
+* Unit05_Codebook: codebook contains details associated with data sets and variable names.
+* MRosales_Livesession5assignment.html
+* MRosales_Livesession5assignment.RMD
+* Top10GirlNames.csv: This file is generated from the .Rmd file to generate the top 10 girl names between 2015 and 2016
