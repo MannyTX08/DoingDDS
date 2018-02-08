@@ -1,0 +1,38 @@
+---
+title: "Live Session 5 Assigment: Questions 1, 2, and 3"
+author: "Manuel Rosales"
+date: "February 8, 2018" 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1: Data Munging
+
+a) First, import the .txt file into R so you can process it. Assign the resulting data frame to an object, df, that consists of three columns with human-readable column names for each
+
+```{r Question1a}
+# Question 1a
+setwd("~/Library/Mobile Documents/com~apple~CloudDocs/DataScience@SMU/MSDS_DDS/DoingDDSGitHub/Unit_05")
+df <- read.table("yob2016.txt", header = FALSE, sep = ";", col.names = c("FirstName","Gender","Count"))
+names(df) # Confirm column names
+head(df,10) # Review head of df
+```
+
+b) Display the summary and structure of df
+
+```{r Question1b}
+# Question 1b
+summary(df)
+str(df)
+```
+
+c) One name was entered twice and misspelled. He accidentally put three y's at the end of the name.  Write an R command to figure out which name it is and display it.
+
+d) Upon finding the misspelled name, please remove this particular observation, as the client says it's redundant.  Save the remaining dataset as an object: y2016 
+
+
+
+
