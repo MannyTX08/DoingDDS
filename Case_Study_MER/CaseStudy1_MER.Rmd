@@ -12,6 +12,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 From initial review of the information provided we will show how many breweries are present within each state.
+
+<!--
+Create loop to test for all similarities and append a table with those cases
+
+namestotest = tolower(namestotest)
+agrep(namestotest[2],namestotest[-2],ignore.case=T,value=T,max.distance = 0.1, useBytes = FALSE)
+-->
+
 Question 1
 ```{r Q1}
 # Read in csv file containing Brewery information and locations.
@@ -112,7 +120,6 @@ TopIBU <- df_merge_subset[order(-df_merge_subset$IBU),]
 TopIBU <- TopIBU[1,]
 TopIBU[,2] <- NULL
 ```
-
 
 Question 6
 ```{r Q6}
