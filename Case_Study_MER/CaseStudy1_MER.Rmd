@@ -7,9 +7,13 @@ output:
     keep_md: yes
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 From initial review of the information provided we will show how many breweries are present within each state.
 Question 1
-```{Q1}
+```{r Q1}
 # Read in csv file containing Brewery information and locations.
 Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',')
 
@@ -27,7 +31,7 @@ BreweryByState
 Question 2
 Combine data set into a merged frame
 
-```{Q2}
+```{r Q2}
 # Read in csv file containing Beer details
 Beers <- read.csv("Beers.csv", header=TRUE, sep = ',')
 
@@ -56,16 +60,16 @@ tail(df_merge,6)
 
 Question 3
 
-```{Q3}
+```{r Q3}
 CountNA <- colSums(is.na(df_merge))
 CountNA <- data.frame(CountNA)
 CountNA
 ```
 
 Question 4
-```{Q4}
+```{r Q4}
 # Remove NA from df_merge
-library(ggplot)
+library(ggplot2)
 df_merge <- na.omit(df_merge)
 
 # Generate the median of alcohol content and international bitterness unit for each State
@@ -96,7 +100,7 @@ ggplot(plot_frame, aes(x=State, y=MedianIBU)) +
 ```
 
 Question 5
-```{Q5}
+```{r Q5}
 # Sort data to determine State with highest ABV
 # Largest ABV is .125 within Kentucky
 TopABV <- df_merge_subset[order(-df_merge_subset$ABV),]
@@ -111,12 +115,12 @@ TopIBU[,2] <- NULL
 
 
 Question 6
-```{Q6}
+```{r Q6}
 summaryABV <- summary(df_merge_subset$ABV)
 ```
 
 Question 7
-```{Q7}
+```{r Q7}
 library(ggplot2)
 cor(df_merge_subset$IBU, df_merge_subset$ABV)
 
