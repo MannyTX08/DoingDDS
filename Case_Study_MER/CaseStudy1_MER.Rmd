@@ -13,16 +13,32 @@ knitr::opts_chunk$set(echo = TRUE)
 
 From initial review of the information provided we will show how many breweries are present within each state.
 
-<!--
-Create loop to test for all similarities and append a table with those cases
+```{r cleanup}
+Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',')
+namestotest <- Breweries$Name
 
-namestotest = tolower(namestotest)
-agrep(namestotest[2],namestotest[-2],ignore.case=T,value=T,max.distance = 0.1, useBytes = FALSE)
--->
+duptable = data.frame(Index=as.numeric(),Name=as.character(),City=as.character(),State=as.character())
 
+for (i in 1:length(namestotest)){
+# Find potential duplicates
+dup = agrep(namestotest[i],namestotest[-i],ignore.case = T, value = T, max.distance = .1, useBytes=FALSE)
+name = ifelse(length(dup)>0,dup,"OK")
+dupoccurance = data.frame(Index=i,Name = name, City=Breweries[i,3],State=Breweries[i,4])
+duptable = rbind(duptable,dupoccurance)
+}
+
+# Remove rows that are "OK"
+duptable=subset(duptable,duptable$Name!="OK")
+
+duptable = duptable[with(duptable, order(Name, City)),]
+
+head(duptable)
+
+```
 Question 1
 ```{r Q1}
 # Read in csv file containing Brewery information and locations.
+##### Update here to deal with new Brewery Names
 Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',')
 
 # Determine number of Breweries within each state.

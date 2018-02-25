@@ -125,8 +125,42 @@ $(document).ready(function () {
 </div>
 
 
-<p>From initial review of the information provided we will show how many breweries are present within each state. Question 1</p>
+<p>From initial review of the information provided we will show how many breweries are present within each state.</p>
+<pre class="r"><code>Breweries &lt;- read.csv(&quot;Breweries.csv&quot;, header=TRUE, sep = ',')
+namestotest &lt;- Breweries$Name
+
+duptable = data.frame(Index=as.numeric(),Name=as.character())
+
+for (i in 1:length(namestotest)){
+# Find potential duplicates
+dup = agrep(namestotest[i],namestotest[-i],ignore.case = T, value = T, max.distance = .1, useBytes=FALSE)
+name = ifelse(length(dup)&gt;0,dup,&quot;OK&quot;)
+dupoccurance = data.frame(Index=i,Name = name)
+duptable = rbind(duptable,dupoccurance)
+}
+
+# Remove rows that are &quot;OK&quot;
+duptable=subset(duptable,duptable$Name!=&quot;OK&quot;)
+duptable = duptable[order(duptable$Name),] # Sort to find true duplicates
+head(duptable)</code></pre>
+<pre><code>##     Index                               Name
+## 2       2          Against The Grain Brewery
+## 6       6        Witch's Hat Brewing Company
+## 406   406        Witch's Hat Brewing Company
+## 13     13                 Blackrocks Brewery
+## 96     96                 Blackrocks Brewery
+## 14     14 Christian Moerlein Brewing Company</code></pre>
+<pre class="r"><code>tail(duptable)</code></pre>
+<pre><code>##     Index                         Name
+## 519   519    Due South Brewing Company
+## 531   531 Dirty Bucket Brewing Company
+## 535   535   Smartmouth Brewing Company
+## 541   541    Mother Earth Brew Company
+## 547   547      Upslope Brewing Company
+## 551   551  Piney River Brewing Company</code></pre>
+<p>Question 1</p>
 <pre class="r"><code># Read in csv file containing Brewery information and locations.
+##### Update here to deal with new Brewery Names
 Breweries &lt;- read.csv(&quot;Breweries.csv&quot;, header=TRUE, sep = ',')
 
 # Determine number of Breweries within each state.

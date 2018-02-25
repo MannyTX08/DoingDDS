@@ -10,10 +10,56 @@ output:
 
 
 From initial review of the information provided we will show how many breweries are present within each state.
+
+
+```r
+Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',')
+namestotest <- Breweries$Name
+
+duptable = data.frame(Index=as.numeric(),Name=as.character())
+
+for (i in 1:length(namestotest)){
+# Find potential duplicates
+dup = agrep(namestotest[i],namestotest[-i],ignore.case = T, value = T, max.distance = .1, useBytes=FALSE)
+name = ifelse(length(dup)>0,dup,"OK")
+dupoccurance = data.frame(Index=i,Name = name)
+duptable = rbind(duptable,dupoccurance)
+}
+
+# Remove rows that are "OK"
+duptable=subset(duptable,duptable$Name!="OK")
+duptable = duptable[order(duptable$Name),] # Sort to find true duplicates
+head(duptable)
+```
+
+```
+##     Index                               Name
+## 2       2          Against The Grain Brewery
+## 6       6        Witch's Hat Brewing Company
+## 406   406        Witch's Hat Brewing Company
+## 13     13                 Blackrocks Brewery
+## 96     96                 Blackrocks Brewery
+## 14     14 Christian Moerlein Brewing Company
+```
+
+```r
+tail(duptable)
+```
+
+```
+##     Index                         Name
+## 519   519    Due South Brewing Company
+## 531   531 Dirty Bucket Brewing Company
+## 535   535   Smartmouth Brewing Company
+## 541   541    Mother Earth Brew Company
+## 547   547      Upslope Brewing Company
+## 551   551  Piney River Brewing Company
+```
 Question 1
 
 ```r
 # Read in csv file containing Brewery information and locations.
+##### Update here to deal with new Brewery Names
 Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',')
 
 # Determine number of Breweries within each state.
@@ -360,7 +406,6 @@ TopIBU <- df_merge_subset[order(-df_merge_subset$IBU),]
 TopIBU <- TopIBU[1,]
 TopIBU[,2] <- NULL
 ```
-
 
 Question 6
 
