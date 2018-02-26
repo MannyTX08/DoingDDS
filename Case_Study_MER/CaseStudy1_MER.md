@@ -13,58 +13,120 @@ From initial review of the information provided we will show how many breweries 
 
 
 ```r
-Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',')
-namestotest <- Breweries$Name
-
-duptable = data.frame(Index=as.numeric(),Name=as.character())
-
-for (i in 1:length(namestotest)){
-# Find potential duplicates
-dup = agrep(namestotest[i],namestotest[-i],ignore.case = T, value = T, max.distance = .1, useBytes=FALSE)
-name = ifelse(length(dup)>0,dup,"OK")
-dupoccurance = data.frame(Index=i,Name = name)
-duptable = rbind(duptable,dupoccurance)
-}
-
-# Remove rows that are "OK"
-duptable=subset(duptable,duptable$Name!="OK")
-duptable = duptable[order(duptable$Name),] # Sort to find true duplicates
-head(duptable)
+library(stringr)
+library(tidyverse)
 ```
 
 ```
-##     Index                               Name
-## 2       2          Against The Grain Brewery
-## 6       6        Witch's Hat Brewing Company
-## 406   406        Witch's Hat Brewing Company
-## 13     13                 Blackrocks Brewery
-## 96     96                 Blackrocks Brewery
-## 14     14 Christian Moerlein Brewing Company
+## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+```
+
+```
+## ✔ ggplot2 2.2.1     ✔ readr   1.1.1
+## ✔ tibble  1.4.2     ✔ purrr   0.2.4
+## ✔ tidyr   0.7.2     ✔ dplyr   0.7.4
+## ✔ ggplot2 2.2.1     ✔ forcats 0.3.0
+```
+
+```
+## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
 ```
 
 ```r
-tail(duptable)
+Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',', stringsAsFactors = FALSE)
+
+# Check City spelling
+Breweries <- Breweries[with(Breweries, order(State,City,Name)),]
+
+BreweriesClean <- Breweries
+BreweriesClean <- BreweriesClean[with(BreweriesClean, order(Brew_ID)),]
+
+# Misspelled City Names, researched official spelling 
+BreweriesClean[c(59,139),3] <- "Saint Paul" 
+BreweriesClean[130,3] <- "St. Marys" 
+BreweriesClean[68,3] <- "St. Petersburg" 
+BreweriesClean[339,3] <- "St. Johns" 
+BreweriesClean[c(378,457),3] <- "Menomonie" 
+BreweriesClean[69,3] <- "Mount Airy" 
+BreweriesClean[385,3] <- "Mount Pleasant" 
+
+# Incorrect State for given City
+BreweriesClean[96,4] <- "MI" 
+
+# Check for duplicate Breweries after removing Brewery and Brewing Company
+BreweriesClean$BrewDups = BreweriesClean$Name
+  
+# Remove "Brewery", "Brewing Company", "Brewing", "Beer Co.", 
+BreweriesClean$BrewDups <- str_replace_all(BreweriesClean$BrewDups, "Brewery", "")
+BreweriesClean$BrewDups <- str_replace_all(BreweriesClean$BrewDups, "Brewing", "")
+BreweriesClean$BrewDups <- str_replace_all(BreweriesClean$BrewDups, "Beer", "")
+BreweriesClean$BrewDups <- str_replace_all(BreweriesClean$BrewDups, "Cider", "")
+BreweriesClean$BrewDups <- str_replace_all(BreweriesClean$BrewDups, "Company", "")
+BreweriesClean$BrewDups <- str_replace_all(BreweriesClean$BrewDups, "co.", "")
+BreweriesClean$BrewDups <- str_replace_all(BreweriesClean$BrewDups, " ", "")
+
+# Convert all characters to lower so we can better find potential duplicates
+BreweriesClean$BrewDups <- tolower(BreweriesClean$BrewDups)
+# Paste Name converted to lower, City, and State for matching duplicates
+BreweriesClean <- unite(BreweriesClean, BrewDupsFreq, BrewDups, City, State, sep = ",", remove = FALSE)
+
+# Determine if multiples are present
+dupNames <- as.data.frame(table(BreweriesClean$BrewDupsFreq))
+dupNames <- subset(dupNames, dupNames$Freq>1)
+
+BreweriesCleanDups <- BreweriesClean[BreweriesClean$BrewDupsFreq %in%  dupNames$Var1,]
+BreweriesCleanDups <- BreweriesCleanDups[order(BreweriesCleanDups$BrewDupsFreq),]
+
+# Review results
+BreweriesCleanDups
 ```
 
 ```
-##     Index                         Name
-## 519   519    Due South Brewing Company
-## 531   531 Dirty Bucket Brewing Company
-## 535   535   Smartmouth Brewing Company
-## 541   541    Mother Earth Brew Company
-## 547   547      Upslope Brewing Company
-## 551   551  Piney River Brewing Company
+##     Brew_ID                         Name                   BrewDupsFreq
+## 2         2    Against the Grain Brewery againstthegrain,Louisville, KY
+## 63       63    Against The Grain Brewery againstthegrain,Louisville, KY
+## 147     147                 Angry Minnow        angryminnow,Hayward, WI
+## 543     543 Angry Minnow Brewing Company        angryminnow,Hayward, WI
+## 89       89 Goose Island Brewing Company        gooseisland,Chicago, IL
+## 197     197 Goose Island Brewery Company        gooseisland,Chicago, IL
+## 378     378      Lucette Brewing Company          lucette,Menomonie, WI
+## 457     457      Lucette Brewing Company          lucette,Menomonie, WI
+## 59       59       Summit Brewing Company          summit,Saint Paul, MN
+## 139     139       Summit Brewing Company          summit,Saint Paul, MN
+##           City State        BrewDups
+## 2   Louisville    KY againstthegrain
+## 63  Louisville    KY againstthegrain
+## 147    Hayward    WI     angryminnow
+## 543    Hayward    WI     angryminnow
+## 89     Chicago    IL     gooseisland
+## 197    Chicago    IL     gooseisland
+## 378  Menomonie    WI         lucette
+## 457  Menomonie    WI         lucette
+## 59  Saint Paul    MN          summit
+## 139 Saint Paul    MN          summit
 ```
+
+```r
+# Fix based on observations and other data discovery
+BreweriesClean[2,2] <- "Against The Grain Brewery"
+BreweriesClean[147,2] <- "Angrew Minnow Brewing Company"
+BreweriesClean[197,2] <- "Goose Island Brewing Company"
+BreweriesClean[380,2] <- "Grey Sail Brewing Company"
+BreweriesClean[396,2] <- "Hops & Grains Brewing Company"
+
+# Brew_ID with Duplicate Rows: 2 & 63, 89 & 197, 147 & 543, 378 & 457, 59 & 139
+BreweriesClean$BrewDupsFreq <- NULL
+BreweriesClean$BrewDups <- NULL
+```
+
+
 Question 1
 
 ```r
-# Read in csv file containing Brewery information and locations.
-##### Update here to deal with new Brewery Names
-Breweries <- read.csv("Breweries.csv", header=TRUE, sep = ',')
-
-# Determine number of Breweries within each state.
-# Coerce the levels within factor of State into a data frame
-BreweryByState <- table(factor(Breweries$State))
+# Make use of cleaned data set
+BreweryByState <- table(factor(BreweriesClean$State))
 BreweryByState <- data.frame(BreweryByState)
 
 # Rename columns to something meaningful
@@ -94,7 +156,7 @@ BreweryByState
 ## 17    KS     3
 ## 18    KY     4
 ## 19    LA     5
-## 20    MA    23
+## 20    MA    22
 ## 21    MD     7
 ## 22    ME     9
 ## 23    MI    32
@@ -126,6 +188,7 @@ BreweryByState
 ## 49    WI    20
 ## 50    WV     1
 ## 51    WY     4
+## 52    MI     1
 ```
 
 Question 2
@@ -350,16 +413,15 @@ plot_frame
 ## 39    0.0570      30.0    PA
 ## 40    0.0525      24.0    RI
 ## 41    0.0500      30.0    SC
-## 42        NA        NA    SD
-## 43    0.0550      37.0    TN
-## 44    0.0550      33.0    TX
-## 45    0.0400      34.0    UT
-## 46    0.0570      42.0    VA
-## 47    0.0550      30.0    VT
-## 48    0.0560      38.0    WA
-## 49    0.0510      19.0    WI
-## 50    0.0620      57.5    WV
-## 51    0.0510      21.0    WY
+## 42    0.0550      37.0    TN
+## 43    0.0550      33.0    TX
+## 44    0.0400      34.0    UT
+## 45    0.0570      42.0    VA
+## 46    0.0550      30.0    VT
+## 47    0.0560      38.0    WA
+## 48    0.0510      19.0    WI
+## 49    0.0620      57.5    WV
+## 50    0.0510      21.0    WY
 ```
 
 ```r
@@ -371,10 +433,6 @@ ggplot(plot_frame, aes(x=State, y=MedianABV)) +
   coord_flip()
 ```
 
-```
-## Warning: Removed 1 rows containing missing values (position_stack).
-```
-
 ![](CaseStudy1_MER_files/figure-html/Q4-1.png)<!-- -->
 
 ```r
@@ -384,10 +442,6 @@ ggplot(plot_frame, aes(x=State, y=MedianIBU)) +
   xlab("MedianIBU") + ylab("State") +
   ggtitle("MedianIBU by State") +
   coord_flip()
-```
-
-```
-## Warning: Removed 1 rows containing missing values (position_stack).
 ```
 
 ![](CaseStudy1_MER_files/figure-html/Q4-2.png)<!-- -->
