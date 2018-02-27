@@ -132,13 +132,13 @@ Question 4
 ```{r Q4}
 # Remove NA from df_merge
 library(ggplot2)
-df_merge <- na.omit(df_merge)
+#df_merge <- na.omit(df_merge)
 
 # Generate the median of alcohol content and international bitterness unit for each State
 df_merge_subset <- data.frame(State=df_merge$State, ABV=df_merge$ABV, IBU=df_merge$IBU)
 
-MedianABV <- tapply(df_merge_subset$ABV,df_merge_subset$State,median)
-MedianIBU <- tapply(df_merge_subset$IBU,df_merge_subset$State,median)
+MedianABV <- tapply(df_merge_subset$ABV,df_merge_subset$State,na.omit(median))
+MedianIBU <- tapply(df_merge_subset$IBU,df_merge_subset$State,na.omit(median))
 
 # Combine with State
 plot_frame <- data.frame(MedianABV, MedianIBU)
@@ -164,26 +164,28 @@ ggplot(plot_frame, aes(x=State, y=MedianIBU)) +
 Question 5
 ```{r Q5}
 # Sort data to determine State with highest ABV
-# Largest ABV is .125 within Kentucky
+# Largest ABV is .125 within Colorado
 TopABV <- df_merge_subset[order(-df_merge_subset$ABV),]
 TopABV <- TopABV[1,1:2]
-
+TopABV
 # Sort data to determine State with highest IBU
 # Largest IBU is 138 within Oregan
 TopIBU <- df_merge_subset[order(-df_merge_subset$IBU),]
 TopIBU <- TopIBU[1,]
 TopIBU[,2] <- NULL
+TopIBU
 ```
 
 Question 6
 ```{r Q6}
 summaryABV <- summary(df_merge_subset$ABV)
+summaryABV
 ```
 
 Question 7
 ```{r Q7}
 library(ggplot2)
-cor(df_merge_subset$IBU, df_merge_subset$ABV)
+cor(df_merge_subset$IBU, df_merge_subset$ABV, use = "complete.obs")
 
 ggplot(df_merge_subset, aes(x=IBU, y=ABV)) + 
   geom_point(color = "red", size = 3)+

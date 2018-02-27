@@ -18,7 +18,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -29,7 +29,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -357,13 +357,13 @@ Question 4
 ```r
 # Remove NA from df_merge
 library(ggplot2)
-df_merge <- na.omit(df_merge)
+#df_merge <- na.omit(df_merge)
 
 # Generate the median of alcohol content and international bitterness unit for each State
 df_merge_subset <- data.frame(State=df_merge$State, ABV=df_merge$ABV, IBU=df_merge$IBU)
 
-MedianABV <- tapply(df_merge_subset$ABV,df_merge_subset$State,median)
-MedianIBU <- tapply(df_merge_subset$IBU,df_merge_subset$State,median)
+MedianABV <- tapply(df_merge_subset$ABV,df_merge_subset$State,na.omit(median))
+MedianIBU <- tapply(df_merge_subset$IBU,df_merge_subset$State,na.omit(median))
 
 # Combine with State
 plot_frame <- data.frame(MedianABV, MedianIBU)
@@ -374,56 +374,57 @@ plot_frame
 
 ```
 ##    MedianABV MedianIBU State
-## 1     0.0570      46.0    AK
-## 2     0.0600      43.0    AL
-## 3     0.0400      39.0    AR
-## 4     0.0575      20.5    AZ
-## 5     0.0580      42.0    CA
-## 6     0.0650      40.0    CO
-## 7     0.0610      29.0    CT
-## 8     0.0590      47.5    DC
-## 9     0.0550      52.0    DE
-## 10    0.0620      55.0    FL
-## 11    0.0620      55.0    GA
-## 12    0.0520      22.5    HI
-## 13    0.0560      26.0    IA
-## 14    0.0580      39.0    ID
-## 15    0.0570      30.0    IL
-## 16    0.0570      33.0    IN
-## 17    0.0500      20.0    KS
-## 18    0.0575      31.5    KY
-## 19    0.0510      31.5    LA
-## 20    0.0540      35.0    MA
-## 21    0.0565      29.0    MD
-## 22    0.0670      61.0    ME
-## 23    0.0560      35.0    MI
-## 24    0.0555      44.5    MN
-## 25    0.0500      24.0    MO
+## 1     0.0560        NA    AK
+## 2     0.0600        NA    AL
+## 3     0.0520        NA    AR
+## 4         NA        NA    AZ
+## 5         NA        NA    CA
+## 6         NA        NA    CO
+## 7     0.0600        NA    CT
+## 8     0.0625        NA    DC
+## 9         NA        NA    DE
+## 10        NA        NA    FL
+## 11    0.0550        NA    GA
+## 12    0.0540        NA    HI
+## 13    0.0555        NA    IA
+## 14    0.0565        NA    ID
+## 15    0.0580        NA    IL
+## 16        NA        NA    IN
+## 17    0.0500        NA    KS
+## 18        NA        NA    KY
+## 19    0.0520        NA    LA
+## 20    0.0540        NA    MA
+## 21    0.0580        NA    MD
+## 22    0.0510        NA    ME
+## 23        NA        NA    MI
+## 24    0.0560        NA    MN
+## 25        NA        NA    MO
 ## 26    0.0580      45.0    MS
-## 27    0.0570      40.0    MT
-## 28    0.0610      33.5    NC
+## 27        NA        NA    MT
+## 28        NA        NA    NC
 ## 29    0.0500      32.0    ND
-## 30    0.0560      35.0    NE
-## 31    0.0465      48.5    NH
+## 30        NA        NA    NE
+## 31    0.0550        NA    NH
 ## 32    0.0460      34.5    NJ
-## 33    0.0610      51.0    NM
-## 34    0.0550      41.0    NV
-## 35    0.0595      47.0    NY
-## 36    0.0575      40.0    OH
-## 37    0.0630      35.0    OK
-## 38    0.0560      40.0    OR
-## 39    0.0570      30.0    PA
-## 40    0.0525      24.0    RI
-## 41    0.0500      30.0    SC
-## 42    0.0550      37.0    TN
-## 43    0.0550      33.0    TX
-## 44    0.0400      34.0    UT
-## 45    0.0570      42.0    VA
-## 46    0.0550      30.0    VT
-## 47    0.0560      38.0    WA
-## 48    0.0510      19.0    WI
-## 49    0.0620      57.5    WV
-## 50    0.0510      21.0    WY
+## 33        NA        NA    NM
+## 34        NA        NA    NV
+## 35        NA        NA    NY
+## 36    0.0580        NA    OH
+## 37    0.0600        NA    OK
+## 38    0.0560        NA    OR
+## 39        NA        NA    PA
+## 40    0.0550        NA    RI
+## 41    0.0550        NA    SC
+## 42    0.0600        NA    SD
+## 43    0.0570        NA    TN
+## 44        NA        NA    TX
+## 45    0.0400        NA    UT
+## 46    0.0565        NA    VA
+## 47    0.0550        NA    VT
+## 48    0.0555        NA    WA
+## 49        NA        NA    WI
+## 50    0.0620      57.5    WV
+## 51    0.0500        NA    WY
 ```
 
 ```r
@@ -433,6 +434,10 @@ ggplot(plot_frame, aes(x=State, y=MedianABV)) +
   xlab("MedianABV") + ylab("State") +
   ggtitle("MedianABV by State") +
   coord_flip()
+```
+
+```
+## Warning: Removed 18 rows containing missing values (position_stack).
 ```
 
 ![](CaseStudy1_MER_files/figure-html/Q4-1.png)<!-- -->
@@ -446,34 +451,58 @@ ggplot(plot_frame, aes(x=State, y=MedianIBU)) +
   coord_flip()
 ```
 
+```
+## Warning: Removed 47 rows containing missing values (position_stack).
+```
+
 ![](CaseStudy1_MER_files/figure-html/Q4-2.png)<!-- -->
 
 Question 5
 
 ```r
 # Sort data to determine State with highest ABV
-# Largest ABV is .125 within Kentucky
+# Largest ABV is .125 within Colorado
 TopABV <- df_merge_subset[order(-df_merge_subset$ABV),]
 TopABV <- TopABV[1,1:2]
+TopABV
+```
 
+```
+##     State   ABV
+## 375    CO 0.128
+```
+
+```r
 # Sort data to determine State with highest IBU
 # Largest IBU is 138 within Oregan
 TopIBU <- df_merge_subset[order(-df_merge_subset$IBU),]
 TopIBU <- TopIBU[1,]
 TopIBU[,2] <- NULL
+TopIBU
+```
+
+```
+##      State IBU
+## 1857    OR 138
 ```
 
 Question 6
 
 ```r
 summaryABV <- summary(df_merge_subset$ABV)
+summaryABV
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+## 0.00100 0.05000 0.05600 0.05977 0.06700 0.12800      62
 ```
 
 Question 7
 
 ```r
 library(ggplot2)
-cor(df_merge_subset$IBU, df_merge_subset$ABV)
+cor(df_merge_subset$IBU, df_merge_subset$ABV, use = "complete.obs")
 ```
 
 ```
@@ -486,6 +515,14 @@ ggplot(df_merge_subset, aes(x=IBU, y=ABV)) +
   geom_smooth(method=lm, se = FALSE, color = "black") +
   labs(x="International Bitterness Units of Beer", y="Alcohol by Volume of Beer") + 
   ggtitle("Alchohol by Volume vs International Bitterness Units")
+```
+
+```
+## Warning: Removed 1005 rows containing non-finite values (stat_smooth).
+```
+
+```
+## Warning: Removed 1005 rows containing missing values (geom_point).
 ```
 
 ![](CaseStudy1_MER_files/figure-html/Q7-1.png)<!-- -->
