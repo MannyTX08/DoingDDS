@@ -123,6 +123,8 @@ BreweriesClean$BrewDups <- NULL
 
 
 Question 1
+Count by State, probably  needs to be based on Brewery_Name given the cleaning...
+
 
 ```r
 # Make use of cleaned data set

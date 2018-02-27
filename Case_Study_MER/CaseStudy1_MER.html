@@ -214,7 +214,7 @@ BreweriesClean[396,2] &lt;- &quot;Hops &amp; Grains Brewing Company&quot;
 # Brew_ID with Duplicate Rows: 2 &amp; 63, 89 &amp; 197, 147 &amp; 543, 378 &amp; 457, 59 &amp; 139
 BreweriesClean$BrewDupsFreq &lt;- NULL
 BreweriesClean$BrewDups &lt;- NULL</code></pre>
-<p>Question 1</p>
+<p>Question 1 Count by State, probably needs to be based on Brewery_Name given the cleaning…</p>
 <pre class="r"><code># Make use of cleaned data set
 BreweryByState &lt;- table(factor(BreweriesClean$State))
 BreweryByState &lt;- data.frame(BreweryByState)
