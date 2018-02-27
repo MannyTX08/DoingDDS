@@ -5,6 +5,8 @@ date: "2/20/2018"
 output:
   html_document:
     keep_md: yes
+    fig_width: 5
+    fig_height: 6.5
 ---
 
 ```{r setup, include=FALSE}
@@ -135,29 +137,36 @@ library(ggplot2)
 #df_merge <- na.omit(df_merge)
 
 # Generate the median of alcohol content and international bitterness unit for each State
-df_merge_subset <- data.frame(State=df_merge$State, ABV=df_merge$ABV, IBU=df_merge$IBU)
+df_merge_ABV <- na.omit(data.frame(State=df_merge$State, ABV=df_merge$ABV)) #, IBU=df_merge$IBU)
+df_merge_IBU <- na.omit(data.frame(State=df_merge$State, IBU=df_merge$IBU))
 
-MedianABV <- tapply(df_merge_subset$ABV,df_merge_subset$State,na.omit(median))
-MedianIBU <- tapply(df_merge_subset$IBU,df_merge_subset$State,na.omit(median))
+MedianABV <- tapply(df_merge_ABV$ABV,df_merge_ABV$State,median)
+MedianIBU <- tapply(df_merge_IBU$IBU,df_merge_IBU$State,median)
 
-# Combine with State
-plot_frame <- data.frame(MedianABV, MedianIBU)
-plot_frame$State <- rownames(plot_frame)
-rownames(plot_frame) <- NULL
-plot_frame
+MedianABV <- as.data.frame(MedianABV)
+MedianABV$State <- rownames(MedianABV)
+rownames(MedianABV) <- NULL
+MedianABV$State <- factor(MedianABV$State, levels = MedianABV[order(MedianABV$MedianABV), "State"])
+
+MedianIBU <- as.data.frame(MedianIBU)
+MedianIBU$State <- rownames(MedianIBU)
+rownames(MedianIBU) <- NULL
+MedianIBU <- na.omit(MedianIBU) # SD had 1 value, the median function generated a null
+MedianIBU$State <- factor(MedianIBU$State, levels = MedianIBU[order(MedianIBU$MedianIBU), "State"])
 
 # Plot MedianABV by State
-ggplot(plot_frame, aes(x=State, y=MedianABV)) +
+ggplot(data=MedianABV, aes(x=State, y=MedianABV)) +
   geom_bar(stat='identity', color='black', fill='light blue') +
-  xlab("MedianABV") + ylab("State") +
+  ylab("MedianABV") + xlab("State") +
   ggtitle("MedianABV by State") +
   coord_flip()
 
 # Plot MedianIBU by State  
-ggplot(plot_frame, aes(x=State, y=MedianIBU)) +
+
+ggplot(data=MedianIBU, aes(x=State, y=MedianIBU)) +
   geom_bar(stat='identity', color='black', fill='light green') +
   xlab("MedianIBU") + ylab("State") +
-  ggtitle("MedianIBU by State") +
+  ggtitle("MedianIBU by State") + 
   coord_flip()
 ```
 
@@ -165,29 +174,28 @@ Question 5
 ```{r Q5}
 # Sort data to determine State with highest ABV
 # Largest ABV is .125 within Colorado
-TopABV <- df_merge_subset[order(-df_merge_subset$ABV),]
-TopABV <- TopABV[1,1:2]
+TopABV <- df_merge[order(-df_merge$ABV),]
+TopABV <- TopABV[1,c(5,10)]
 TopABV
 # Sort data to determine State with highest IBU
 # Largest IBU is 138 within Oregan
-TopIBU <- df_merge_subset[order(-df_merge_subset$IBU),]
-TopIBU <- TopIBU[1,]
-TopIBU[,2] <- NULL
+TopIBU <- df_merge[order(-df_merge$IBU),]
+TopIBU <- TopIBU[1,c(6,10)]
 TopIBU
 ```
 
 Question 6
 ```{r Q6}
-summaryABV <- summary(df_merge_subset$ABV)
+summaryABV <- summary(df_merge$ABV)
 summaryABV
 ```
 
 Question 7
 ```{r Q7}
 library(ggplot2)
-cor(df_merge_subset$IBU, df_merge_subset$ABV, use = "complete.obs")
+cor(df_merge$IBU, df_merge$ABV, use = "complete.obs")
 
-ggplot(df_merge_subset, aes(x=IBU, y=ABV)) + 
+ggplot(data=na.omit(df_merge), aes(x=IBU, y=ABV)) + 
   geom_point(color = "red", size = 3)+
   geom_smooth(method=lm, se = FALSE, color = "black") +
   labs(x="International Bitterness Units of Beer", y="Alcohol by Volume of Beer") + 

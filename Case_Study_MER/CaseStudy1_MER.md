@@ -5,6 +5,8 @@ date: "2/20/2018"
 output:
   html_document:
     keep_md: yes
+    fig_width: 5
+    fig_height: 6.5
 ---
 
 
@@ -18,7 +20,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -29,7 +31,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -360,99 +362,41 @@ library(ggplot2)
 #df_merge <- na.omit(df_merge)
 
 # Generate the median of alcohol content and international bitterness unit for each State
-df_merge_subset <- data.frame(State=df_merge$State, ABV=df_merge$ABV, IBU=df_merge$IBU)
+df_merge_ABV <- na.omit(data.frame(State=df_merge$State, ABV=df_merge$ABV)) #, IBU=df_merge$IBU)
+df_merge_IBU <- na.omit(data.frame(State=df_merge$State, IBU=df_merge$IBU))
 
-MedianABV <- tapply(df_merge_subset$ABV,df_merge_subset$State,na.omit(median))
-MedianIBU <- tapply(df_merge_subset$IBU,df_merge_subset$State,na.omit(median))
+MedianABV <- tapply(df_merge_ABV$ABV,df_merge_ABV$State,median)
+MedianIBU <- tapply(df_merge_IBU$IBU,df_merge_IBU$State,median)
 
-# Combine with State
-plot_frame <- data.frame(MedianABV, MedianIBU)
-plot_frame$State <- rownames(plot_frame)
-rownames(plot_frame) <- NULL
-plot_frame
-```
+MedianABV <- as.data.frame(MedianABV)
+MedianABV$State <- rownames(MedianABV)
+rownames(MedianABV) <- NULL
+MedianABV$State <- factor(MedianABV$State, levels = MedianABV[order(MedianABV$MedianABV), "State"])
 
-```
-##    MedianABV MedianIBU State
-## 1     0.0560        NA    AK
-## 2     0.0600        NA    AL
-## 3     0.0520        NA    AR
-## 4         NA        NA    AZ
-## 5         NA        NA    CA
-## 6         NA        NA    CO
-## 7     0.0600        NA    CT
-## 8     0.0625        NA    DC
-## 9         NA        NA    DE
-## 10        NA        NA    FL
-## 11    0.0550        NA    GA
-## 12    0.0540        NA    HI
-## 13    0.0555        NA    IA
-## 14    0.0565        NA    ID
-## 15    0.0580        NA    IL
-## 16        NA        NA    IN
-## 17    0.0500        NA    KS
-## 18        NA        NA    KY
-## 19    0.0520        NA    LA
-## 20    0.0540        NA    MA
-## 21    0.0580        NA    MD
-## 22    0.0510        NA    ME
-## 23        NA        NA    MI
-## 24    0.0560        NA    MN
-## 25        NA        NA    MO
-## 26    0.0580      45.0    MS
-## 27        NA        NA    MT
-## 28        NA        NA    NC
-## 29    0.0500      32.0    ND
-## 30        NA        NA    NE
-## 31    0.0550        NA    NH
-## 32    0.0460      34.5    NJ
-## 33        NA        NA    NM
-## 34        NA        NA    NV
-## 35        NA        NA    NY
-## 36    0.0580        NA    OH
-## 37    0.0600        NA    OK
-## 38    0.0560        NA    OR
-## 39        NA        NA    PA
-## 40    0.0550        NA    RI
-## 41    0.0550        NA    SC
-## 42    0.0600        NA    SD
-## 43    0.0570        NA    TN
-## 44        NA        NA    TX
-## 45    0.0400        NA    UT
-## 46    0.0565        NA    VA
-## 47    0.0550        NA    VT
-## 48    0.0555        NA    WA
-## 49        NA        NA    WI
-## 50    0.0620      57.5    WV
-## 51    0.0500        NA    WY
-```
+MedianIBU <- as.data.frame(MedianIBU)
+MedianIBU$State <- rownames(MedianIBU)
+rownames(MedianIBU) <- NULL
+MedianIBU <- na.omit(MedianIBU) # SD had 1 value, the median function generated a null
+MedianIBU$State <- factor(MedianIBU$State, levels = MedianIBU[order(MedianIBU$MedianIBU), "State"])
 
-```r
 # Plot MedianABV by State
-ggplot(plot_frame, aes(x=State, y=MedianABV)) +
+ggplot(data=MedianABV, aes(x=State, y=MedianABV)) +
   geom_bar(stat='identity', color='black', fill='light blue') +
-  xlab("MedianABV") + ylab("State") +
+  ylab("MedianABV") + xlab("State") +
   ggtitle("MedianABV by State") +
   coord_flip()
-```
-
-```
-## Warning: Removed 18 rows containing missing values (position_stack).
 ```
 
 ![](CaseStudy1_MER_files/figure-html/Q4-1.png)<!-- -->
 
 ```r
 # Plot MedianIBU by State  
-ggplot(plot_frame, aes(x=State, y=MedianIBU)) +
+
+ggplot(data=MedianIBU, aes(x=State, y=MedianIBU)) +
   geom_bar(stat='identity', color='black', fill='light green') +
   xlab("MedianIBU") + ylab("State") +
-  ggtitle("MedianIBU by State") +
+  ggtitle("MedianIBU by State") + 
   coord_flip()
-```
-
-```
-## Warning: Removed 47 rows containing missing values (position_stack).
 ```
 
 ![](CaseStudy1_MER_files/figure-html/Q4-2.png)<!-- -->
@@ -462,34 +406,33 @@ Question 5
 ```r
 # Sort data to determine State with highest ABV
 # Largest ABV is .125 within Colorado
-TopABV <- df_merge_subset[order(-df_merge_subset$ABV),]
-TopABV <- TopABV[1,1:2]
+TopABV <- df_merge[order(-df_merge$ABV),]
+TopABV <- TopABV[1,c(5,10)]
 TopABV
 ```
 
 ```
-##     State   ABV
-## 375    CO 0.128
+##       ABV State
+## 375 0.128    CO
 ```
 
 ```r
 # Sort data to determine State with highest IBU
 # Largest IBU is 138 within Oregan
-TopIBU <- df_merge_subset[order(-df_merge_subset$IBU),]
-TopIBU <- TopIBU[1,]
-TopIBU[,2] <- NULL
+TopIBU <- df_merge[order(-df_merge$IBU),]
+TopIBU <- TopIBU[1,c(6,10)]
 TopIBU
 ```
 
 ```
-##      State IBU
-## 1857    OR 138
+##      IBU State
+## 1857 138    OR
 ```
 
 Question 6
 
 ```r
-summaryABV <- summary(df_merge_subset$ABV)
+summaryABV <- summary(df_merge$ABV)
 summaryABV
 ```
 
@@ -502,7 +445,7 @@ Question 7
 
 ```r
 library(ggplot2)
-cor(df_merge_subset$IBU, df_merge_subset$ABV, use = "complete.obs")
+cor(df_merge$IBU, df_merge$ABV, use = "complete.obs")
 ```
 
 ```
@@ -510,19 +453,11 @@ cor(df_merge_subset$IBU, df_merge_subset$ABV, use = "complete.obs")
 ```
 
 ```r
-ggplot(df_merge_subset, aes(x=IBU, y=ABV)) + 
+ggplot(data=na.omit(df_merge), aes(x=IBU, y=ABV)) + 
   geom_point(color = "red", size = 3)+
   geom_smooth(method=lm, se = FALSE, color = "black") +
   labs(x="International Bitterness Units of Beer", y="Alcohol by Volume of Beer") + 
   ggtitle("Alchohol by Volume vs International Bitterness Units")
-```
-
-```
-## Warning: Removed 1005 rows containing non-finite values (stat_smooth).
-```
-
-```
-## Warning: Removed 1005 rows containing missing values (geom_point).
 ```
 
 ![](CaseStudy1_MER_files/figure-html/Q7-1.png)<!-- -->
