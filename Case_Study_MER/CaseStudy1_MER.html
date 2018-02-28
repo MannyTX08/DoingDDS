@@ -128,12 +128,12 @@ $(document).ready(function () {
 <p>From initial review of the information provided we will show how many breweries are present within each state.</p>
 <pre class="r"><code>library(stringr)
 library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
 <pre><code>## ✔ ggplot2 2.2.1     ✔ readr   1.1.1
 ## ✔ tibble  1.4.2     ✔ purrr   0.2.4
 ## ✔ tidyr   0.7.2     ✔ dplyr   0.7.4
 ## ✔ ggplot2 2.2.1     ✔ forcats 0.3.0</code></pre>
-<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()</code></pre>
 <pre class="r"><code>Breweries &lt;- read.csv(&quot;Breweries.csv&quot;, header=TRUE, sep = ',', stringsAsFactors = FALSE)
@@ -395,13 +395,11 @@ CountNA</code></pre>
 ## City               0
 ## State              0</code></pre>
 <p>Question 4</p>
-<pre class="r"><code># Remove NA from df_merge
-library(ggplot2)
-#df_merge &lt;- na.omit(df_merge)
+<pre class="r"><code>library(ggplot2)
 
 # Generate the median of alcohol content and international bitterness unit for each State
-df_merge_ABV &lt;- na.omit(data.frame(State=df_merge$State, ABV=df_merge$ABV)) #, IBU=df_merge$IBU)
-df_merge_IBU &lt;- na.omit(data.frame(State=df_merge$State, IBU=df_merge$IBU))
+df_merge_ABV &lt;- na.omit(data.frame(State=df_merge$State, ABV=df_merge$ABV)) # Remove NA values
+df_merge_IBU &lt;- na.omit(data.frame(State=df_merge$State, IBU=df_merge$IBU)) # Remove NA values
 
 MedianABV &lt;- tapply(df_merge_ABV$ABV,df_merge_ABV$State,median)
 MedianIBU &lt;- tapply(df_merge_IBU$IBU,df_merge_IBU$State,median)

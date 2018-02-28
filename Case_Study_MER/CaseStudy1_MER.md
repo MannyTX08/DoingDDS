@@ -20,7 +20,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
+## ── Attaching packages ────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──
 ```
 
 ```
@@ -31,7 +31,7 @@ library(tidyverse)
 ```
 
 ```
-## ── Conflicts ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ───────────────────────────────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
 ## ✖ dplyr::filter() masks stats::filter()
 ## ✖ dplyr::lag()    masks stats::lag()
 ```
@@ -357,13 +357,11 @@ CountNA
 Question 4
 
 ```r
-# Remove NA from df_merge
 library(ggplot2)
-#df_merge <- na.omit(df_merge)
 
 # Generate the median of alcohol content and international bitterness unit for each State
-df_merge_ABV <- na.omit(data.frame(State=df_merge$State, ABV=df_merge$ABV)) #, IBU=df_merge$IBU)
-df_merge_IBU <- na.omit(data.frame(State=df_merge$State, IBU=df_merge$IBU))
+df_merge_ABV <- na.omit(data.frame(State=df_merge$State, ABV=df_merge$ABV)) # Remove NA values
+df_merge_IBU <- na.omit(data.frame(State=df_merge$State, IBU=df_merge$IBU)) # Remove NA values
 
 MedianABV <- tapply(df_merge_ABV$ABV,df_merge_ABV$State,median)
 MedianIBU <- tapply(df_merge_IBU$IBU,df_merge_IBU$State,median)
