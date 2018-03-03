@@ -77,3 +77,49 @@ top10 <- head(finalCastList,10)
 knitr::kable(top10,caption = "Top 10 Actor/Actress and Characters", "html") %>%
   kable_styling(bootstrap_options = c("striped","hover"), full_width = F)
 ```
+
+## Question 2: NBA Shooting Stats
+
+a. On the ESPN website, there are statistics of each NBA player. Navigate to the San Antonio Spurs current statistics (likely http://www.espn.com/nba/team/stats/_/name/sa/san-antonio-spurs). You are interested in the Shooting Statistics table.
+b. Scrape the page and specifically target the Shooting Statistics table.
+
+```{r Q2b}
+url <- 'http://www.espn.com/nba/team/stats/_/name/sa/san-antonio-spurs)'
+page2 <- read_html(url)
+
+# Idetifying html nodes and putting cast list into table using rvest::html_table
+shootingStats <- rvest::html_nodes(page2, css = 'table.tablehead')
+shootingStats <- rvest::html_table(shootingStats)
+shootingStats <- data.frame(shootingStats)
+```
+
+c. Clean up the table (You might get some warnings if you’re working with tibbles)
++ You’ll want to create an R data.frame() with one observation for each player. Make sure that you do not accidentally include blank rows, a row of column names, or the Totals row in the table as observations.
++ The column PLAYER has two variables of interest in it: the player’s name and their position, denoted by 1-2 letters after their name. Split the cells into two columns, one with Name and the other Position.
++ Check the data type of all columns. Convert relevant columns to numeric. Check the data type of all columns again to confirm that they have changed!
+
+```{r Q2c}
+# Use the first row as initial column names and remove row 1 (duplicative)
+names(shootingStats) <- shootingStats[1,] 
+shootingStats <- shootingStats[-1,]
+
+# Only keep columns associated with Shooting Stats by 
+# removing columns named 'GAME STATISTICS' 
+shootingStats <- shootingStats[, -which(names(shootingStats) %in% c("GAME STATISTICS"))] 
+rownames(shootingStats) <- 1:nrow(shootingStats) # fix row index
+
+# Use the new first row as column names and remove row 1 (duplicative)
+names(shootingStats) <- shootingStats[1,] 
+shootingStats <- shootingStats[-1,]
+rownames(shootingStats) <- 1:nrow(shootingStats) # fix row index
+
+# Remove row associted with 'Totals'
+shootingStats <- subset(shootingStats,shootingStats$PLAYER!='Totals')
+
+# Separate player name and position
+finalShootingStats<- shootingStats %>%
+        separate(PLAYER, into=c('Name', 'Position'), sep=", ") #separate by ,+a space
+
+finalShootingStats
+
+```
