@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r libraries, include=TRUE, message=FALSE, warning=FALSE}
 library(rvest)
 library(tidyr)
+library(ggplot2)
 library(kableExtra)
 ```
 
@@ -120,6 +121,29 @@ shootingStats <- subset(shootingStats,shootingStats$PLAYER!='Totals')
 finalShootingStats<- shootingStats %>%
         separate(PLAYER, into=c('Name', 'Position'), sep=", ") #separate by ,+a space
 
-finalShootingStats
+knitr::kable(finalShootingStats,caption = "San Antonio Spurs Shooting Stats", "html") %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = F)
+
+# Confirm data type of each column
+sapply(finalShootingStats,class) # All are captured as character
+finalShootingStats[,3:ncol(finalShootingStats)] <- sapply(finalShootingStats[,3:ncol(finalShootingStats)],as.numeric) # Convert data types
+sapply(finalShootingStats,class) # Confirmation that columns are now numeric
+```
+
+d. Create a colorful bar chart that shows the Field Goals Percentage Per Game for each
+person. It will be graded on the following criteria:
++ Informative Title, centered
++ Relevant x and y axis labels (not simply variables names!)
++ Human-readable axes with no overlap
++ Color the columns by the team member’s position
+
+```{r Q2d, echo=TRUE}
+# Generate plot based on requirements
+
+ggplot(finalShootingStats, aes(reorder(Name, `FG%`),`FG%`)) + geom_bar(stat="identity", aes(fill=Position)) +
+	ggtitle('Field Goals Percentage Per Game vs Player Name') +
+	ylab('Field Goals Percentage Per Game')	+ xlab('Player Name') +
+	theme(plot.title=element_text(hjust = .5), axis.ticks.y=element_blank(),axis.ticks.x=element_blank()) +
+  theme(axis.text.x = element_text(angle=60,hjust=1))
 
 ```

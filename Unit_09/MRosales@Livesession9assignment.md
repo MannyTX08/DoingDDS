@@ -13,6 +13,7 @@ output:
 ```r
 library(rvest)
 library(tidyr)
+library(ggplot2)
 library(kableExtra)
 ```
 
@@ -200,44 +201,386 @@ shootingStats <- subset(shootingStats,shootingStats$PLAYER!='Totals')
 finalShootingStats<- shootingStats %>%
         separate(PLAYER, into=c('Name', 'Position'), sep=", ") #separate by ,+a space
 
-finalShootingStats
+knitr::kable(finalShootingStats,caption = "San Antonio Spurs Shooting Stats", "html") %>%
+  kable_styling(bootstrap_options = c("striped","hover"), full_width = F)
+```
+
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<caption>San Antonio Spurs Shooting Stats</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Name </th>
+   <th style="text-align:left;"> Position </th>
+   <th style="text-align:left;"> FGM </th>
+   <th style="text-align:left;"> FGA </th>
+   <th style="text-align:left;"> FG% </th>
+   <th style="text-align:left;"> 3PM </th>
+   <th style="text-align:left;"> 3PA </th>
+   <th style="text-align:left;"> 3P% </th>
+   <th style="text-align:left;"> FTM </th>
+   <th style="text-align:left;"> FTA </th>
+   <th style="text-align:left;"> FT% </th>
+   <th style="text-align:left;"> 2PM </th>
+   <th style="text-align:left;"> 2PA </th>
+   <th style="text-align:left;"> 2P% </th>
+   <th style="text-align:left;"> PPS </th>
+   <th style="text-align:left;"> AFG% </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> LaMarcus Aldridge </td>
+   <td style="text-align:left;"> PF </td>
+   <td style="text-align:left;"> 8.8 </td>
+   <td style="text-align:left;"> 17.6 </td>
+   <td style="text-align:left;"> .501 </td>
+   <td style="text-align:left;"> 0.4 </td>
+   <td style="text-align:left;"> 1.4 </td>
+   <td style="text-align:left;"> .325 </td>
+   <td style="text-align:left;"> 4.4 </td>
+   <td style="text-align:left;"> 5.2 </td>
+   <td style="text-align:left;"> 0.84 </td>
+   <td style="text-align:left;"> 8.4 </td>
+   <td style="text-align:left;"> 16.2 </td>
+   <td style="text-align:left;"> .516 </td>
+   <td style="text-align:left;"> 1.276 </td>
+   <td style="text-align:left;"> 0.51 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Kawhi Leonard </td>
+   <td style="text-align:left;"> SF </td>
+   <td style="text-align:left;"> 5.8 </td>
+   <td style="text-align:left;"> 12.3 </td>
+   <td style="text-align:left;"> .468 </td>
+   <td style="text-align:left;"> 1.2 </td>
+   <td style="text-align:left;"> 3.9 </td>
+   <td style="text-align:left;"> .314 </td>
+   <td style="text-align:left;"> 3.4 </td>
+   <td style="text-align:left;"> 4.2 </td>
+   <td style="text-align:left;"> 0.82 </td>
+   <td style="text-align:left;"> 4.6 </td>
+   <td style="text-align:left;"> 8.4 </td>
+   <td style="text-align:left;"> .539 </td>
+   <td style="text-align:left;"> 1.315 </td>
+   <td style="text-align:left;"> 0.52 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Rudy Gay </td>
+   <td style="text-align:left;"> SF </td>
+   <td style="text-align:left;"> 4.3 </td>
+   <td style="text-align:left;"> 9.1 </td>
+   <td style="text-align:left;"> .470 </td>
+   <td style="text-align:left;"> 0.7 </td>
+   <td style="text-align:left;"> 2.1 </td>
+   <td style="text-align:left;"> .329 </td>
+   <td style="text-align:left;"> 2.1 </td>
+   <td style="text-align:left;"> 2.7 </td>
+   <td style="text-align:left;"> 0.78 </td>
+   <td style="text-align:left;"> 3.6 </td>
+   <td style="text-align:left;"> 7.0 </td>
+   <td style="text-align:left;"> .512 </td>
+   <td style="text-align:left;"> 1.244 </td>
+   <td style="text-align:left;"> 0.51 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Pau Gasol </td>
+   <td style="text-align:left;"> C </td>
+   <td style="text-align:left;"> 3.9 </td>
+   <td style="text-align:left;"> 8.5 </td>
+   <td style="text-align:left;"> .464 </td>
+   <td style="text-align:left;"> 0.7 </td>
+   <td style="text-align:left;"> 1.7 </td>
+   <td style="text-align:left;"> .398 </td>
+   <td style="text-align:left;"> 2.1 </td>
+   <td style="text-align:left;"> 2.8 </td>
+   <td style="text-align:left;"> 0.77 </td>
+   <td style="text-align:left;"> 3.2 </td>
+   <td style="text-align:left;"> 6.8 </td>
+   <td style="text-align:left;"> .480 </td>
+   <td style="text-align:left;"> 1.257 </td>
+   <td style="text-align:left;"> 0.50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Patty Mills </td>
+   <td style="text-align:left;"> PG </td>
+   <td style="text-align:left;"> 3.3 </td>
+   <td style="text-align:left;"> 7.9 </td>
+   <td style="text-align:left;"> .421 </td>
+   <td style="text-align:left;"> 1.9 </td>
+   <td style="text-align:left;"> 4.8 </td>
+   <td style="text-align:left;"> .385 </td>
+   <td style="text-align:left;"> 1.2 </td>
+   <td style="text-align:left;"> 1.4 </td>
+   <td style="text-align:left;"> 0.87 </td>
+   <td style="text-align:left;"> 1.4 </td>
+   <td style="text-align:left;"> 3.1 </td>
+   <td style="text-align:left;"> .479 </td>
+   <td style="text-align:left;"> 1.230 </td>
+   <td style="text-align:left;"> 0.54 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Manu Ginobili </td>
+   <td style="text-align:left;"> SG </td>
+   <td style="text-align:left;"> 3.4 </td>
+   <td style="text-align:left;"> 7.6 </td>
+   <td style="text-align:left;"> .443 </td>
+   <td style="text-align:left;"> 1.1 </td>
+   <td style="text-align:left;"> 3.2 </td>
+   <td style="text-align:left;"> .333 </td>
+   <td style="text-align:left;"> 1.6 </td>
+   <td style="text-align:left;"> 1.9 </td>
+   <td style="text-align:left;"> 0.85 </td>
+   <td style="text-align:left;"> 2.3 </td>
+   <td style="text-align:left;"> 4.4 </td>
+   <td style="text-align:left;"> .522 </td>
+   <td style="text-align:left;"> 1.232 </td>
+   <td style="text-align:left;"> 0.51 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Danny Green </td>
+   <td style="text-align:left;"> SG </td>
+   <td style="text-align:left;"> 3.3 </td>
+   <td style="text-align:left;"> 8.1 </td>
+   <td style="text-align:left;"> .407 </td>
+   <td style="text-align:left;"> 1.8 </td>
+   <td style="text-align:left;"> 4.6 </td>
+   <td style="text-align:left;"> .383 </td>
+   <td style="text-align:left;"> 0.6 </td>
+   <td style="text-align:left;"> 0.8 </td>
+   <td style="text-align:left;"> 0.78 </td>
+   <td style="text-align:left;"> 1.5 </td>
+   <td style="text-align:left;"> 3.5 </td>
+   <td style="text-align:left;"> .440 </td>
+   <td style="text-align:left;"> 1.111 </td>
+   <td style="text-align:left;"> 0.52 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Tony Parker </td>
+   <td style="text-align:left;"> PG </td>
+   <td style="text-align:left;"> 3.7 </td>
+   <td style="text-align:left;"> 7.7 </td>
+   <td style="text-align:left;"> .476 </td>
+   <td style="text-align:left;"> 0.1 </td>
+   <td style="text-align:left;"> 0.7 </td>
+   <td style="text-align:left;"> .217 </td>
+   <td style="text-align:left;"> 1.0 </td>
+   <td style="text-align:left;"> 1.5 </td>
+   <td style="text-align:left;"> 0.67 </td>
+   <td style="text-align:left;"> 3.6 </td>
+   <td style="text-align:left;"> 7.0 </td>
+   <td style="text-align:left;"> .500 </td>
+   <td style="text-align:left;"> 1.097 </td>
+   <td style="text-align:left;"> 0.49 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Kyle Anderson </td>
+   <td style="text-align:left;"> SF </td>
+   <td style="text-align:left;"> 3.2 </td>
+   <td style="text-align:left;"> 6.2 </td>
+   <td style="text-align:left;"> .517 </td>
+   <td style="text-align:left;"> 0.2 </td>
+   <td style="text-align:left;"> 0.7 </td>
+   <td style="text-align:left;"> .297 </td>
+   <td style="text-align:left;"> 1.5 </td>
+   <td style="text-align:left;"> 2.1 </td>
+   <td style="text-align:left;"> 0.74 </td>
+   <td style="text-align:left;"> 3.0 </td>
+   <td style="text-align:left;"> 5.5 </td>
+   <td style="text-align:left;"> .544 </td>
+   <td style="text-align:left;"> 1.315 </td>
+   <td style="text-align:left;"> 0.53 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Dejounte Murray </td>
+   <td style="text-align:left;"> PG </td>
+   <td style="text-align:left;"> 3.1 </td>
+   <td style="text-align:left;"> 7.0 </td>
+   <td style="text-align:left;"> .440 </td>
+   <td style="text-align:left;"> 0.1 </td>
+   <td style="text-align:left;"> 0.3 </td>
+   <td style="text-align:left;"> .250 </td>
+   <td style="text-align:left;"> 1.2 </td>
+   <td style="text-align:left;"> 1.6 </td>
+   <td style="text-align:left;"> 0.72 </td>
+   <td style="text-align:left;"> 3.0 </td>
+   <td style="text-align:left;"> 6.7 </td>
+   <td style="text-align:left;"> .449 </td>
+   <td style="text-align:left;"> 1.058 </td>
+   <td style="text-align:left;"> 0.45 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Bryn Forbes </td>
+   <td style="text-align:left;"> SG </td>
+   <td style="text-align:left;"> 2.8 </td>
+   <td style="text-align:left;"> 6.8 </td>
+   <td style="text-align:left;"> .414 </td>
+   <td style="text-align:left;"> 1.2 </td>
+   <td style="text-align:left;"> 3.3 </td>
+   <td style="text-align:left;"> .376 </td>
+   <td style="text-align:left;"> 0.5 </td>
+   <td style="text-align:left;"> 0.9 </td>
+   <td style="text-align:left;"> 0.61 </td>
+   <td style="text-align:left;"> 1.6 </td>
+   <td style="text-align:left;"> 3.5 </td>
+   <td style="text-align:left;"> .448 </td>
+   <td style="text-align:left;"> 1.087 </td>
+   <td style="text-align:left;"> 0.50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Davis Bertans </td>
+   <td style="text-align:left;"> C </td>
+   <td style="text-align:left;"> 2.2 </td>
+   <td style="text-align:left;"> 4.9 </td>
+   <td style="text-align:left;"> .439 </td>
+   <td style="text-align:left;"> 1.3 </td>
+   <td style="text-align:left;"> 3.4 </td>
+   <td style="text-align:left;"> .371 </td>
+   <td style="text-align:left;"> 0.5 </td>
+   <td style="text-align:left;"> 0.7 </td>
+   <td style="text-align:left;"> 0.79 </td>
+   <td style="text-align:left;"> 0.9 </td>
+   <td style="text-align:left;"> 1.5 </td>
+   <td style="text-align:left;"> .589 </td>
+   <td style="text-align:left;"> 1.240 </td>
+   <td style="text-align:left;"> 0.57 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Joffrey Lauvergne </td>
+   <td style="text-align:left;"> C </td>
+   <td style="text-align:left;"> 2.0 </td>
+   <td style="text-align:left;"> 3.8 </td>
+   <td style="text-align:left;"> .532 </td>
+   <td style="text-align:left;"> 0.0 </td>
+   <td style="text-align:left;"> 0.1 </td>
+   <td style="text-align:left;"> .000 </td>
+   <td style="text-align:left;"> 0.6 </td>
+   <td style="text-align:left;"> 1.0 </td>
+   <td style="text-align:left;"> 0.63 </td>
+   <td style="text-align:left;"> 2.0 </td>
+   <td style="text-align:left;"> 3.7 </td>
+   <td style="text-align:left;"> .550 </td>
+   <td style="text-align:left;"> 1.234 </td>
+   <td style="text-align:left;"> 0.53 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Derrick White </td>
+   <td style="text-align:left;"> PG </td>
+   <td style="text-align:left;"> 0.8 </td>
+   <td style="text-align:left;"> 1.6 </td>
+   <td style="text-align:left;"> .480 </td>
+   <td style="text-align:left;"> 0.3 </td>
+   <td style="text-align:left;"> 0.5 </td>
+   <td style="text-align:left;"> .500 </td>
+   <td style="text-align:left;"> 0.8 </td>
+   <td style="text-align:left;"> 1.1 </td>
+   <td style="text-align:left;"> 0.67 </td>
+   <td style="text-align:left;"> 0.5 </td>
+   <td style="text-align:left;"> 1.1 </td>
+   <td style="text-align:left;"> .471 </td>
+   <td style="text-align:left;"> 1.600 </td>
+   <td style="text-align:left;"> 0.56 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Brandon Paul </td>
+   <td style="text-align:left;"> SG </td>
+   <td style="text-align:left;"> 0.9 </td>
+   <td style="text-align:left;"> 2.1 </td>
+   <td style="text-align:left;"> .440 </td>
+   <td style="text-align:left;"> 0.3 </td>
+   <td style="text-align:left;"> 0.9 </td>
+   <td style="text-align:left;"> .286 </td>
+   <td style="text-align:left;"> 0.4 </td>
+   <td style="text-align:left;"> 0.6 </td>
+   <td style="text-align:left;"> 0.61 </td>
+   <td style="text-align:left;"> 0.6 </td>
+   <td style="text-align:left;"> 1.2 </td>
+   <td style="text-align:left;"> .567 </td>
+   <td style="text-align:left;"> 1.193 </td>
+   <td style="text-align:left;"> 0.50 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Darrun Hilliard </td>
+   <td style="text-align:left;"> SG </td>
+   <td style="text-align:left;"> 0.4 </td>
+   <td style="text-align:left;"> 1.4 </td>
+   <td style="text-align:left;"> .263 </td>
+   <td style="text-align:left;"> 0.0 </td>
+   <td style="text-align:left;"> 0.4 </td>
+   <td style="text-align:left;"> .000 </td>
+   <td style="text-align:left;"> 0.4 </td>
+   <td style="text-align:left;"> 0.5 </td>
+   <td style="text-align:left;"> 0.86 </td>
+   <td style="text-align:left;"> 0.4 </td>
+   <td style="text-align:left;"> 1.0 </td>
+   <td style="text-align:left;"> .385 </td>
+   <td style="text-align:left;"> .842 </td>
+   <td style="text-align:left;"> 0.26 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Matt Costello </td>
+   <td style="text-align:left;"> SF </td>
+   <td style="text-align:left;"> 0.3 </td>
+   <td style="text-align:left;"> 1.0 </td>
+   <td style="text-align:left;"> .333 </td>
+   <td style="text-align:left;"> 0.0 </td>
+   <td style="text-align:left;"> 0.0 </td>
+   <td style="text-align:left;"> .000 </td>
+   <td style="text-align:left;"> 0.0 </td>
+   <td style="text-align:left;"> 0.0 </td>
+   <td style="text-align:left;"> 0.00 </td>
+   <td style="text-align:left;"> 0.3 </td>
+   <td style="text-align:left;"> 1.0 </td>
+   <td style="text-align:left;"> .333 </td>
+   <td style="text-align:left;"> .667 </td>
+   <td style="text-align:left;"> 0.33 </td>
+  </tr>
+</tbody>
+</table>
+
+```r
+# Confirm data type of each column
+sapply(finalShootingStats,class) # All are captured as character
 ```
 
 ```
-##                 Name Position FGM  FGA  FG% 3PM 3PA  3P% FTM FTA  FT% 2PM
-## 1  LaMarcus Aldridge       PF 8.8 17.6 .501 0.4 1.4 .325 4.4 5.2 0.84 8.4
-## 2      Kawhi Leonard       SF 5.8 12.3 .468 1.2 3.9 .314 3.4 4.2 0.82 4.6
-## 3           Rudy Gay       SF 4.3  9.1 .470 0.7 2.1 .329 2.1 2.7 0.78 3.6
-## 4          Pau Gasol        C 3.9  8.5 .464 0.7 1.7 .398 2.1 2.8 0.77 3.2
-## 5        Patty Mills       PG 3.3  7.9 .421 1.9 4.8 .385 1.2 1.4 0.87 1.4
-## 6      Manu Ginobili       SG 3.4  7.6 .443 1.1 3.2 .333 1.6 1.9 0.85 2.3
-## 7        Danny Green       SG 3.3  8.1 .407 1.8 4.6 .383 0.6 0.8 0.78 1.5
-## 8        Tony Parker       PG 3.7  7.7 .476 0.1 0.7 .217 1.0 1.5 0.67 3.6
-## 9      Kyle Anderson       SF 3.2  6.2 .517 0.2 0.7 .297 1.5 2.1 0.74 3.0
-## 10   Dejounte Murray       PG 3.1  7.0 .440 0.1 0.3 .250 1.2 1.6 0.72 3.0
-## 11       Bryn Forbes       SG 2.8  6.8 .414 1.2 3.3 .376 0.5 0.9 0.61 1.6
-## 12     Davis Bertans        C 2.2  4.9 .439 1.3 3.4 .371 0.5 0.7 0.79 0.9
-## 13 Joffrey Lauvergne        C 2.0  3.8 .532 0.0 0.1 .000 0.6 1.0 0.63 2.0
-## 14     Derrick White       PG 0.8  1.6 .480 0.3 0.5 .500 0.8 1.1 0.67 0.5
-## 15      Brandon Paul       SG 0.9  2.1 .440 0.3 0.9 .286 0.4 0.6 0.61 0.6
-## 16   Darrun Hilliard       SG 0.4  1.4 .263 0.0 0.4 .000 0.4 0.5 0.86 0.4
-## 17     Matt Costello       SF 0.3  1.0 .333 0.0 0.0 .000 0.0 0.0 0.00 0.3
-##     2PA  2P%   PPS AFG%
-## 1  16.2 .516 1.276 0.51
-## 2   8.4 .539 1.315 0.52
-## 3   7.0 .512 1.244 0.51
-## 4   6.8 .480 1.257 0.50
-## 5   3.1 .479 1.230 0.54
-## 6   4.4 .522 1.232 0.51
-## 7   3.5 .440 1.111 0.52
-## 8   7.0 .500 1.097 0.49
-## 9   5.5 .544 1.315 0.53
-## 10  6.7 .449 1.058 0.45
-## 11  3.5 .448 1.087 0.50
-## 12  1.5 .589 1.240 0.57
-## 13  3.7 .550 1.234 0.53
-## 14  1.1 .471 1.600 0.56
-## 15  1.2 .567 1.193 0.50
-## 16  1.0 .385  .842 0.26
-## 17  1.0 .333  .667 0.33
+##        Name    Position         FGM         FGA         FG%         3PM 
+## "character" "character" "character" "character" "character" "character" 
+##         3PA         3P%         FTM         FTA         FT%         2PM 
+## "character" "character" "character" "character" "character" "character" 
+##         2PA         2P%         PPS        AFG% 
+## "character" "character" "character" "character"
 ```
+
+```r
+finalShootingStats[,3:ncol(finalShootingStats)] <- sapply(finalShootingStats[,3:ncol(finalShootingStats)],as.numeric) # Convert data types
+sapply(finalShootingStats,class) # Confirmation that columns are now numeric
+```
+
+```
+##        Name    Position         FGM         FGA         FG%         3PM 
+## "character" "character"   "numeric"   "numeric"   "numeric"   "numeric" 
+##         3PA         3P%         FTM         FTA         FT%         2PM 
+##   "numeric"   "numeric"   "numeric"   "numeric"   "numeric"   "numeric" 
+##         2PA         2P%         PPS        AFG% 
+##   "numeric"   "numeric"   "numeric"   "numeric"
+```
+
+d. Create a colorful bar chart that shows the Field Goals Percentage Per Game for each
+person. It will be graded on the following criteria:
++ Informative Title, centered
++ Relevant x and y axis labels (not simply variables names!)
++ Human-readable axes with no overlap
++ Color the columns by the team member’s position
+
+
+```r
+# Generate plot based on requirements
+
+ggplot(finalShootingStats, aes(reorder(Name, `FG%`),`FG%`)) + geom_bar(stat="identity", aes(fill=Position)) +
+	ggtitle('Field Goals Percentage Per Game vs Player Name') +
+	ylab('Field Goals Percentage Per Game')	+ xlab('Player Name') +
+	theme(plot.title=element_text(hjust = .5), axis.ticks.y=element_blank(),axis.ticks.x=element_blank()) +
+  theme(axis.text.x = element_text(angle=60,hjust=1))
+```
+
+![](MRosales@Livesession9assignment_files/figure-html/Q2d-1.png)<!-- -->
