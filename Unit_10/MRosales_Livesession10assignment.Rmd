@@ -1,5 +1,5 @@
 ---
-title: "Live Sessiong 10 Assignment"
+title: "Live Session 10 Assignment"
 author: "Manuel Rosales"
 date: "3/18/2018"
 output:
@@ -131,7 +131,7 @@ ggplot(data = state_merge, aes(reorder(State,HospPerKMiles),HospPerKMiles)) +
     geom_bar(stat="identity",aes(fill=Region)) + 
     ggtitle('Mainland Locations of VA Medical Centers by State')+coord_flip() +
     xlab('Mainland Locations of Veterans Administration Medical Centers') +
-    ylab('Density by State (Centers/1000 sq. miles)')+
+    ylab('Density by State (Locations / 1000 square miles)')+
     theme(plot.title=element_text(hjust = .5)) +
     theme(axis.text.y = element_text(hjust=1))
 ```
