@@ -1,9 +1,9 @@
-Author: Manuel Rosales Date: 03/17/2018
+Author: Manuel Rosales 
+Date: 03/17/2018
 
-This directory contains all fils associated with Unit 10 assignments and documents. This assignment covers the use of ggplot for generating frequency plots along with cleaning data from different sources for merging.
+This directory contains all files associated with Unit 10 assignments and documents. This assignment covers the use of ggplot for generating frequency plots, and cleaning data from different sources for merging.
 
 Files:
-
 + MRosales_Livesession10assignment.html
 + MRosales_Livesession10assignment.RMD
 + MRosales_Livesession10assignment.md
@@ -11,5 +11,4 @@ Files:
 + statesize.csv: contains area for each State in Square Miles
 
 Folders: 
-
 + Files: contains a downloaded binary R data set associated with VA Hospiptal locations
