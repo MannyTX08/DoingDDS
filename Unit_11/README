@@ -1,0 +1,13 @@
+Author: Manuel Rosales 
+Date: 03/26/2018
+
+This directory contains all files associated with Unit 11 assignment and documents. This assignment covers the use of time series, forecasting, and dygraphs.
+
+
+Files:
++ MRosales_Livesession11assignment.html
++ MRosales_Livesession11assignment.RMD
++ MRosales_Livesession11assignment.md
++ MRosales_Livesession11assignement_files: contains exported figures in png format
++ Unit11TimeSeries_Gregorvitch.csv: contains wand sale data for Question 3 (no header)
++ Unit11TimeSeries_Ollivander.csv: contains wand sale data for Question 3 (no header)
